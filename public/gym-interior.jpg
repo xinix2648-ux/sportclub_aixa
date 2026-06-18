@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#1a0e2e"/>
+  <rect x="100" y="250" width="1000" height="300" rx="20" fill="#2E1A47" opacity="0.8"/>
+  <rect x="150" y="330" width="900" height="60" rx="10" fill="#4a2c8a" opacity="0.6"/>
+  <rect x="200" y="410" width="800" height="40" rx="8" fill="#F2B705" opacity="0.4"/>
+  <circle cx="200" cy="300" r="30" fill="#F2B705" opacity="0.3"/>
+  <circle cx="1000" cy="500" r="40" fill="#F2B705" opacity="0.2"/>
+  <text x="600" y="380" font-family="Arial" font-size="48" fill="#F2B705" text-anchor="middle" font-weight="bold">GORILA SPORTCLUB</text>
+  <text x="600" y="440" font-family="Arial" font-size="20" fill="#c8bde0" text-anchor="middle">Donde la fuerza encuentra su propósito</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#120e24"/>
+  <path d="M0 400 Q300 200 600 400 Q900 600 1200 400 L1200 800 L0 800 Z" fill="#2E1A47" opacity="0.6"/>
+  <path d="M0 500 Q300 300 600 500 Q900 700 1200 500 L1200 800 L0 800 Z" fill="#4a2c8a" opacity="0.4"/>
+  <circle cx="350" cy="350" r="60" fill="#F2B705" opacity="0.15"/>
+  <circle cx="850" cy="450" r="80" fill="#F2B705" opacity="0.1"/>
+  <text x="600" y="380" font-family="Arial" font-size="36" fill="#F2B705" text-anchor="middle" font-weight="bold">¿Listo para el desafío?</text>
+  <text x="600" y="430" font-family="Arial" font-size="22" fill="#c8bde0" text-anchor="middle">Únete a la manada</text>
+</svg>
