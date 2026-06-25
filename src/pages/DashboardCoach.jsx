@@ -27,8 +27,8 @@ export default function DashboardCoach() {
       .then((res) => setStudents(res.data.data || []))
       .catch(() => {
         setStudents([
-          { id: 1, full_name: 'Usuario Demo 1', email: 'user1@demo.cl', role: 'user' },
-          { id: 2, full_name: 'Usuario Demo 2', email: 'user2@demo.cl', role: 'user' },
+          { id: 1, full_name: 'Usuario Demo 1', email: 'user1@porcinosportclub.cl', role: 'user' },
+          { id: 2, full_name: 'Usuario Demo 2', email: 'user2@porcinosportclub.cl', role: 'user' },
         ])
       })
       .finally(() => setLoading(false))
