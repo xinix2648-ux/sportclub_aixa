@@ -16,10 +16,14 @@ export default function Login() {
     setLoading(true)
     try {
       const user = await login(email, password)
-      const dashboards = { User: '/dashboard/usuario', Coach: '/dashboard/coach', Admin: '/dashboard/admin' }
+      if (user.must_change_password) {
+        navigate('/edit-profile')
+        return
+      }
+      const dashboards = { user: '/dashboard/user', coach: '/dashboard/coach', admin: '/dashboard/admin' }
       navigate(dashboards[user.role])
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al iniciar sesión')
+      setError(err.response?.data?.message || 'Error al iniciar sesión')
     } finally {
       setLoading(false)
     }
@@ -32,8 +36,8 @@ export default function Login() {
           <Col xs={11} sm={8} md={6} lg={4}>
             <div className="auth-card p-4 p-md-5 text-center">
               <Link to="/" className="text-decoration-none">
-                <img src="/logo-icon.svg" alt="Gorila SportClub" height="60" className="mb-3" />
-                <h3 className="text-gold fw-bold mb-1">Gorila SportClub</h3>
+                <img src="/logo.png" alt="Porcinos Sport Club" height="70" className="mb-3" />
+                <h3 className="text-pink fw-bold mb-1">Porcinos Sport Club</h3>
               </Link>
               <p className="small-text mb-4">Inicia sesión en tu cuenta</p>
               {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
@@ -46,13 +50,13 @@ export default function Login() {
                   <Form.Label className="small-text">Contraseña</Form.Label>
                   <Form.Control type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </Form.Group>
-                <Button type="submit" className="btn-gold w-100" disabled={loading}>
+                <Button type="submit" className="btn-pink w-100" disabled={loading}>
                   {loading ? <Spinner size="sm" /> : 'Iniciar Sesión'}
                 </Button>
               </Form>
               <div className="mt-3 d-flex justify-content-between small-text">
-                <Link to="/register" className="text-gold text-decoration-none">Registrarse</Link>
-                <Link to="/recover" className="text-gold text-decoration-none">¿Olvidaste tu contraseña?</Link>
+                <Link to="/register" className="text-pink text-decoration-none">Registrarse</Link>
+                <Link to="/recover" className="text-pink text-decoration-none">¿Olvidaste tu contraseña?</Link>
               </div>
             </div>
           </Col>

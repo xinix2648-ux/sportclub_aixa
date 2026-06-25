@@ -18,13 +18,13 @@ export default function Recover() {
           <Col xs={11} sm={8} md={6} lg={4}>
             <div className="auth-card p-4 p-md-5 text-center">
               <Link to="/" className="text-decoration-none">
-                <img src="/logo-icon.svg" alt="Gorila SportClub" height="50" className="mb-2" />
-                <h3 className="text-gold fw-bold mb-1">Gorila SportClub</h3>
+                <img src="/logo.png" alt="Porcinos Sport Club" height="60" className="mb-2" />
+                <h3 className="text-pink fw-bold mb-1">Porcinos Sport Club</h3>
               </Link>
               <p className="small-text mb-4">Recupera tu contraseña</p>
               {sent ? (
                 <Alert variant="success" className="py-3">
-                  Se ha enviado un enlace de recuperación a <strong>{email}</strong>. Revisa tu bandeja de entrada.
+                  Se ha enviado un enlace de recuperación a <strong>{email}</strong>.
                 </Alert>
               ) : (
                 <Form onSubmit={handleSubmit}>
@@ -32,11 +32,11 @@ export default function Recover() {
                     <Form.Label className="small-text">Email registrado</Form.Label>
                     <Form.Control type="email" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
                   </Form.Group>
-                  <Button type="submit" className="btn-gold w-100">Enviar enlace</Button>
+                  <Button type="submit" className="btn-pink w-100">Enviar enlace</Button>
                 </Form>
               )}
               <p className="mt-3 small-text mb-0">
-                <Link to="/login" className="text-gold text-decoration-none">Volver al inicio de sesión</Link>
+                <Link to="/login" className="text-pink text-decoration-none">Volver al inicio de sesión</Link>
               </p>
             </div>
           </Col>

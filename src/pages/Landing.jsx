@@ -20,51 +20,54 @@ const quotes = [
 export default function Landing() {
   return (
     <>
-      {/* --- NAV --- */}
-      <nav className="navbar-glass fixed-top px-4 py-2 d-flex justify-content-between align-items-center">
+      <nav className="navbar-glass fixed-top px-4 py-2 d-flex justify-content-between align-items-center" style={{ zIndex: 1030 }}>
         <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none">
-          <img src="/logo-icon.svg" alt="Gorila SportClub" height="40" />
-          <span className="fw-bold text-gold" style={{ fontSize: '1.3rem' }}>Gorila SportClub</span>
+          <img src="/logo.png" alt="Porcinos" height="42" />
+          <span className="fw-bold text-pink" style={{ fontSize: '1.3rem' }}>Porcinos Sport Club</span>
         </Link>
         <div className="d-flex gap-2">
-          <Link to="/login"><Button variant="outline-light" size="sm" className="rounded-pill px-3">Ingresar</Button></Link>
-          <Link to="/register"><Button className="btn-gold btn-sm rounded-pill px-3">Registro</Button></Link>
+          <Link to="/login"><Button variant="outline-dark" size="sm" className="rounded-pill px-3">Ingresar</Button></Link>
+          <Link to="/register"><Button className="btn-pink btn-sm rounded-pill px-3">Registro</Button></Link>
         </div>
       </nav>
 
-      {/* --- HERO --- */}
-      <section className="position-relative" style={{ minHeight: '100vh', overflow: 'hidden' }}>
+      <section className="position-relative d-flex align-items-center" style={{ minHeight: '100vh', overflow: 'hidden', paddingTop: '70px' }}>
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'url(/gym-interior.jpg)',
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'brightness(0.35)',
+          background: 'linear-gradient(135deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%)',
         }} />
-        <div className="position-relative d-flex flex-column align-items-center justify-content-center text-center px-3" style={{ minHeight: '100vh' }}>
-          <img src="/logo-icon.svg" alt="Gorila" height="90" className="mb-3" />
-          <h1 className="display-3 fw-bold text-gold mb-3" style={{ textShadow: '0 0 40px rgba(242,183,5,0.3)' }}>
-            GORILA SPORTCLUB
-          </h1>
-          <p className="fs-5 text-white-50 mb-4" style={{ maxWidth: 600 }}>
-            Donde la fuerza encuentra su propósito. Entrena como un gorila, vive como un campeón.
-          </p>
-          <Link to="/register">
-            <Button className="btn-gold btn-lg rounded-pill px-5 py-3 fs-5">Comienza hoy</Button>
-          </Link>
-        </div>
+        <Container className="position-relative">
+          <Row className="align-items-center">
+            <Col lg={6} className="text-center text-lg-start">
+              <img src="/logo.png" alt="Porcinos" height="100" className="mb-3" />
+              <h1 className="display-3 fw-bold text-pink mb-3">PORCINOS SPORT CLUB</h1>
+              <p className="fs-5 text-secondary mb-4" style={{ maxWidth: 500 }}>
+                Donde la pasión por el deporte se encuentra con la fuerza de una manada. 
+                Entrena como un porcino, vive como un campeón.
+              </p>
+              <Link to="/register">
+                <Button className="btn-pink btn-lg rounded-pill px-5 py-3 fs-5">Comienza hoy</Button>
+              </Link>
+            </Col>
+            <Col lg={6} className="text-center mt-4 mt-lg-0">
+              <img src="/persona-ejercitando.jpg" alt="Entrenamiento" className="img-fluid rounded-4 shadow-lg" style={{ maxHeight: 500, objectFit: 'cover' }} />
+            </Col>
+          </Row>
+        </Container>
       </section>
 
-      {/* --- BENEFITS --- */}
-      <section className="py-5" style={{ background: '#0e0b1e' }}>
+      <section className="py-5" style={{ background: '#fff' }}>
         <Container>
-          <h2 className="text-center text-gold fw-bold mb-1">¿Por qué elegirnos?</h2>
+          <h2 className="text-center text-pink fw-bold mb-1">¿Por qué elegirnos?</h2>
           <p className="text-center small-text mb-5">Todo lo que necesitas para alcanzar tus metas</p>
           <Row className="g-4">
             {benefits.map((b, i) => (
               <Col md={6} lg={4} key={i}>
-                <div className="glass-card p-4 h-100 text-center">
-                  <div className="text-gold mb-3">{b.icon}</div>
-                  <h5 className="text-white fw-semibold">{b.title}</h5>
+                <div className="glass-card p-4 h-100 text-center" style={{ transition: 'all 0.3s ease' }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+                  <div className="text-pink mb-3">{b.icon}</div>
+                  <h5 className="fw-semibold" style={{ color: 'var(--text-primary)' }}>{b.title}</h5>
                   <p className="small-text mb-0">{b.text}</p>
                 </div>
               </Col>
@@ -73,14 +76,13 @@ export default function Landing() {
         </Container>
       </section>
 
-      {/* --- QUOTES --- */}
-      <section className="py-5">
+      <section className="py-5" style={{ background: 'var(--bg-base)' }}>
         <Container>
           <Row className="g-4">
             {quotes.map((q, i) => (
               <Col md={4} key={i}>
                 <div className="glass-card p-4 h-100 d-flex flex-column justify-content-center" style={{ minHeight: 180 }}>
-                  <p className="fs-5 fw-light text-white fst-italic mb-2">"{q.text}"</p>
+                  <p className="fs-5 fw-light fst-italic mb-2" style={{ color: 'var(--text-primary)' }}>"{q.text}"</p>
                   <p className="small-text mb-0 text-end">{q.author}</p>
                 </div>
               </Col>
@@ -89,19 +91,16 @@ export default function Landing() {
         </Container>
       </section>
 
-      {/* --- VISION --- */}
       <section className="py-5 position-relative" style={{ minHeight: 400, overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'url(/treadmills.jpg)',
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'brightness(0.3)',
+          background: 'linear-gradient(135deg, #fce4ec, #f3e5f5)',
         }} />
         <Container className="position-relative">
           <Row className="justify-content-center">
             <Col md={8} className="text-center">
-              <h2 className="text-gold fw-bold mb-3">Nuestra Visión</h2>
-              <p className="fs-5 text-white-50">
+              <h2 className="text-pink fw-bold mb-3">Nuestra Visión</h2>
+              <p className="fs-5 text-secondary">
                 Ser el club deportivo que transforma vidas a través del movimiento. Creemos en el poder del deporte
                 para forjar carácter, construir comunidad y desbloquear el potencial que llevas dentro.
               </p>
@@ -110,37 +109,35 @@ export default function Landing() {
         </Container>
       </section>
 
-      {/* --- CTA --- */}
-      <section className="py-5 position-relative" style={{ minHeight: 400, overflow: 'hidden' }}>
+      <section className="py-5 position-relative" style={{ minHeight: 450, overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'url(/Gemini_Generated_Image_dkb4zadkb4zadkb4.jpg)',
+          backgroundImage: 'url(/hero-principal.jpg)',
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'brightness(0.3)',
+          filter: 'brightness(0.4)',
         }} />
         <Container className="position-relative h-100 d-flex align-items-center">
           <Row className="justify-content-center w-100">
             <Col md={8} className="text-center">
-              <h2 className="text-gold fw-bold mb-3">¿Listo para el desafío?</h2>
+              <h2 className="text-white fw-bold mb-3" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>¿Listo para el desafío?</h2>
               <p className="fs-5 text-white-50 mb-4">
                 Únete a la manada. Primera semana gratis sin compromiso.
               </p>
               <Link to="/register">
-                <Button className="btn-gold btn-lg rounded-pill px-5 py-3 fs-5">Quiero ser parte</Button>
+                <Button className="btn-pink btn-lg rounded-pill px-5 py-3 fs-5">Quiero ser parte</Button>
               </Link>
             </Col>
           </Row>
         </Container>
       </section>
 
-      {/* --- FOOTER --- */}
-      <footer className="py-4 text-center" style={{ background: '#0e0b1e', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <footer className="py-4 text-center" style={{ background: '#fff', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
         <Container>
           <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
-            <img src="/logo-icon.svg" alt="Gorila SportClub" height="30" />
-            <span className="fw-bold text-gold">Gorila SportClub</span>
+            <img src="/logo.png" alt="Porcinos" height="35" />
+            <span className="fw-bold text-pink">Porcinos Sport Club</span>
           </div>
-          <p className="small-text mb-0">&copy; {new Date().getFullYear()} Gorila SportClub. Todos los derechos reservados.</p>
+          <p className="small-text mb-0">&copy; {new Date().getFullYear()} Porcinos Sport Club. Todos los derechos reservados.</p>
         </Container>
       </footer>
     </>

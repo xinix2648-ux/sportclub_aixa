@@ -5,7 +5,7 @@ import { register } from '../services/authService'
 
 export default function Register() {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', role: 'User' })
+  const [form, setForm] = useState({ full_name: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -20,11 +20,17 @@ export default function Register() {
     }
     setLoading(true)
     try {
-      const user = await register({ name: form.name, email: form.email, password: form.password, role: form.role })
-      const dashboards = { User: '/dashboard/usuario', Coach: '/dashboard/coach', Admin: '/dashboard/admin' }
+      const user = await register({
+        full_name: form.full_name,
+        email: form.email,
+        password: form.password,
+        birth_date: null,
+        metadata: { sports: [] }
+      })
+      const dashboards = { user: '/dashboard/user', coach: '/dashboard/coach', admin: '/dashboard/admin' }
       navigate(dashboards[user.role])
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al registrarse')
+      setError(err.response?.data?.message || 'Error al registrarse')
     } finally {
       setLoading(false)
     }
@@ -38,8 +44,8 @@ export default function Register() {
             <div className="auth-card p-4 p-md-5">
               <div className="text-center mb-4">
                 <Link to="/" className="text-decoration-none">
-                  <img src="/logo-icon.svg" alt="Gorila SportClub" height="50" className="mb-2" />
-                  <h3 className="text-gold fw-bold">Gorila SportClub</h3>
+                  <img src="/logo.png" alt="Porcinos Sport Club" height="60" className="mb-2" />
+                  <h3 className="text-pink fw-bold">Porcinos Sport Club</h3>
                 </Link>
                 <p className="small-text">Crea tu cuenta</p>
               </div>
@@ -47,7 +53,7 @@ export default function Register() {
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 text-start">
                   <Form.Label className="small-text">Nombre completo</Form.Label>
-                  <Form.Control name="name" placeholder="Tu nombre" value={form.name} onChange={handleChange} required />
+                  <Form.Control name="full_name" placeholder="Tu nombre" value={form.full_name} onChange={handleChange} required />
                 </Form.Group>
                 <Form.Group className="mb-3 text-start">
                   <Form.Label className="small-text">Email</Form.Label>
@@ -55,25 +61,18 @@ export default function Register() {
                 </Form.Group>
                 <Form.Group className="mb-3 text-start">
                   <Form.Label className="small-text">Contraseña</Form.Label>
-                  <Form.Control type="password" name="password" placeholder="Mín. 6 caracteres" value={form.password} onChange={handleChange} required minLength={6} />
+                  <Form.Control type="password" name="password" placeholder="Mín. 8 caracteres" value={form.password} onChange={handleChange} required minLength={8} />
                 </Form.Group>
-                <Form.Group className="mb-3 text-start">
+                <Form.Group className="mb-4 text-start">
                   <Form.Label className="small-text">Confirmar contraseña</Form.Label>
                   <Form.Control type="password" name="confirm" placeholder="Repite la contraseña" value={form.confirm} onChange={handleChange} required />
                 </Form.Group>
-                <Form.Group className="mb-4 text-start">
-                  <Form.Label className="small-text">Rol</Form.Label>
-                  <Form.Select name="role" value={form.role} onChange={handleChange}>
-                    <option value="User">Atleta</option>
-                    <option value="Coach">Entrenador</option>
-                  </Form.Select>
-                </Form.Group>
-                <Button type="submit" className="btn-gold w-100" disabled={loading}>
+                <Button type="submit" className="btn-pink w-100" disabled={loading}>
                   {loading ? <Spinner size="sm" /> : 'Crear Cuenta'}
                 </Button>
               </Form>
               <p className="text-center mt-3 small-text mb-0">
-                ¿Ya tienes cuenta? <Link to="/login" className="text-gold text-decoration-none">Inicia sesión</Link>
+                ¿Ya tienes cuenta? <Link to="/login" className="text-pink text-decoration-none">Inicia sesión</Link>
               </p>
             </div>
           </Col>

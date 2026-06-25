@@ -1,7 +1,7 @@
 import Header from './Header'
 import Sidebar from './Sidebar'
 
-export default function DashboardLayout({ children, role }) {
+export default function DashboardLayout({ children }) {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }}>
       <Header />

@@ -2,9 +2,9 @@ import { Navigate } from 'react-router-dom'
 import { getToken, getUser } from '../services/authService'
 
 const dashboardMap = {
-  User: '/dashboard/usuario',
-  Coach: '/dashboard/coach',
-  Admin: '/dashboard/admin'
+  user: '/dashboard/user',
+  coach: '/dashboard/coach',
+  admin: '/dashboard/admin'
 }
 
 export default function RoleRoute({ children, role }) {
