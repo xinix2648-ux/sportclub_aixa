@@ -8,7 +8,7 @@ async function seedUsers() {
     [
       {
         full_name: 'Demo User 1',
-        email: 'user1@demo.cl',
+        email: 'user1@porcinosportclub.cl',
         password: '12345678',
         role: 'user',
         must_change_password: false,
@@ -24,7 +24,7 @@ async function seedUsers() {
       },
       {
         full_name: 'Demo User 2',
-        email: 'user2@demo.cl',
+        email: 'user2@porcinosportclub.cl',
         password: '12345678',
         role: 'user',
         must_change_password: false,
@@ -40,7 +40,7 @@ async function seedUsers() {
       },
       {
         full_name: 'Demo Coach 1',
-        email: 'coach1@demo.cl',
+        email: 'coach1@porcinosportclub.cl',
         password: '12345678',
         role: 'coach',
         must_change_password: false,
@@ -57,7 +57,7 @@ async function seedUsers() {
       },
       {
         full_name: 'Demo Coach 2',
-        email: 'coach2@demo.cl',
+        email: 'coach2@porcinosportclub.cl',
         password: '12345678',
         role: 'coach',
         must_change_password: false,
@@ -73,8 +73,8 @@ async function seedUsers() {
         }
       },
       {
-        full_name: 'Demo Admin 1',
-        email: 'admin1@demo.cl',
+        full_name: 'Admin Porcinos',
+        email: 'admin@porcinosportclub.cl',
         password: '12345678',
         role: 'admin',
         must_change_password: true,
@@ -86,7 +86,7 @@ async function seedUsers() {
       },
       {
         full_name: 'Demo Admin 2',
-        email: 'admin2@demo.cl',
+        email: 'admin2@porcinosportclub.cl',
         password: '12345678',
         role: 'admin',
         must_change_password: true,
