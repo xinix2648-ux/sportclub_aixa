@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Row, Col, Table, Button, Modal, Form, Spinner, Alert, Badge } from 'react-bootstrap'
-import { FaUsers, FaUserShield, FaChartLine, FaCogs, FaSearch, FaTimes, FaEye, FaKey, FaFileAlt, FaUserCog } from 'react-icons/fa'
+import { FaUsers, FaUserShield, FaChartLine, FaCogs, FaSearch, FaTimes, FaEye, FaKey, FaFileAlt, FaUserCog, FaQuoteLeft } from 'react-icons/fa'
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
 
@@ -119,7 +119,12 @@ export default function DashboardAdmin() {
     <DashboardLayout>
       <Container fluid className="px-0">
         <h2 className="mb-1" style={{ color: 'var(--admin-color)' }}>Panel de Administración</h2>
-        <p className="small-text mb-4">Control total del sistema Porcinos Sport Club</p>
+        <p className="small-text mb-2">Control total del sistema Porcinos Sport Club</p>
+        <div className="motivational-quote mb-4">
+          <FaQuoteLeft className="me-2" style={{ color: 'var(--pink)', fontSize: '0.8rem' }} />
+          <span className="quote-text">Liderar no es mandar, es inspirar. Cada decisión que tomas construye el futuro del club.</span>
+          <div className="quote-author">— Admin Porcinos</div>
+        </div>
 
         <Row className="g-3 mb-4">
           {stats.map((s, i) => (

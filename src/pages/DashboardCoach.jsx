@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Container, Row, Col, Table, Spinner, Modal, Button, Form } from 'react-bootstrap'
-import { FaUserGraduate, FaChalkboardTeacher, FaCalendarAlt, FaClipboardList, FaSearch, FaEye, FaDumbbell, FaClock, FaMapMarkerAlt } from 'react-icons/fa'
+import { FaUserGraduate, FaChalkboardTeacher, FaCalendarAlt, FaClipboardList, FaSearch, FaEye, FaDumbbell, FaClock, FaMapMarkerAlt, FaQuoteLeft } from 'react-icons/fa'
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
 
@@ -53,7 +53,13 @@ export default function DashboardCoach() {
     <DashboardLayout>
       <Container fluid className="px-0">
         <h2 className="mb-1" style={{ color: 'var(--coach-color)' }}>Panel de Entrenador</h2>
-        <p className="small-text mb-4">Gestiona tus alumnos y clases</p>
+        <p className="small-text mb-2">Gestiona tus alumnos y clases</p>
+        <div className="motivational-quote mb-4">
+          <FaQuoteLeft className="me-2" style={{ color: 'var(--coach-color)', fontSize: '0.8rem' }} />
+          <span className="quote-text">Un buen entrenador puede cambiar un juego. Un gran entrenador puede cambiar una vida. Tú eres ese guía.</span>
+          <div className="quote-author">— Porcinos Sport Club</div>
+        </div>
+
         <Row className="g-3 mb-4">
           {stats.map((s, i) => (
             <Col xs={6} lg={3} key={i}>

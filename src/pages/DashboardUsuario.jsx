@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Container, Row, Col, Table, Spinner, Modal, Button } from 'react-bootstrap'
-import { FaCalendarCheck, FaDumbbell, FaClock, FaFire, FaEye } from 'react-icons/fa'
+import { FaCalendarCheck, FaDumbbell, FaClock, FaFire, FaEye, FaQuoteLeft } from 'react-icons/fa'
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
 import { getUser } from '../services/authService'
@@ -43,7 +43,13 @@ export default function DashboardUsuario() {
     <DashboardLayout>
       <Container fluid className="px-0">
         <h2 className="mb-1" style={{ color: 'var(--user-color)' }}>Mi Panel</h2>
-        <p className="small-text mb-4">Bienvenido, {userData?.full_name || 'Atleta'}</p>
+        <p className="small-text mb-2">Bienvenido, {userData?.full_name || 'Atleta'}</p>
+        <div className="motivational-quote mb-4">
+          <FaQuoteLeft className="me-2" style={{ color: 'var(--user-color)', fontSize: '0.8rem' }} />
+          <span className="quote-text">El dolor que sientes hoy será la fuerza que sentirás mañana. Sigue adelante, cada repetición cuenta.</span>
+          <div className="quote-author">— Porcinos Sport Club</div>
+        </div>
+
         <Row className="g-3 mb-4">
           {stats.map((s, i) => (
             <Col xs={6} lg={3} key={i}>

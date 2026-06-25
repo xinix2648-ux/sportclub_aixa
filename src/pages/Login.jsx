@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap'
+import { FaQuoteLeft } from 'react-icons/fa'
 import { login } from '../services/authService'
 
 export default function Login() {
@@ -29,6 +30,15 @@ export default function Login() {
     }
   }
 
+  const loginQuotes = [
+    'Hoy es un buen día para superarte a ti mismo.',
+    'El único límite es el que tú mismo te pongas.',
+    'Cada repetición cuenta. Cada paso importa.',
+    'La disciplina vence a la motivación cuando la motivación se va.',
+    'No se trata de ser el mejor. Se trata de ser mejor que ayer.',
+  ]
+  const [loginQuote] = useState(loginQuotes[Math.floor(Math.random() * loginQuotes.length)])
+
   return (
     <div className="auth-gradient d-flex align-items-center">
       <Container>
@@ -39,7 +49,10 @@ export default function Login() {
                 <img src="/logo.png" alt="Porcinos Sport Club" height="70" className="mb-3" />
                 <h3 className="text-pink fw-bold mb-1">Porcinos Sport Club</h3>
               </Link>
-              <p className="small-text mb-4">Inicia sesión en tu cuenta</p>
+              <div className="motivational-quote mb-4 text-start">
+                <FaQuoteLeft className="me-2" style={{ color: 'var(--pink)', fontSize: '0.8rem' }} />
+                <span className="quote-text" style={{ fontSize: '0.85rem' }}>{loginQuote}</span>
+              </div>
               {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 text-start">

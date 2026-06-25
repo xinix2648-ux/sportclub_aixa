@@ -34,57 +34,98 @@ body {
 }
 
 .auth-gradient {
-  background: linear-gradient(135deg, rgba(245,240,255,0.92), rgba(245,240,255,0.92)), url('/login-bg.jpg');
+  background: linear-gradient(135deg, rgba(245,240,255,0.93), rgba(245,240,255,0.93)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
 }
 
 .dashboard-bg {
-  background: linear-gradient(135deg, rgba(245,240,255,0.94), rgba(245,240,255,0.94)), url('/fondo.jpg');
+  background: linear-gradient(135deg, rgba(245,240,255,0.95), rgba(245,240,255,0.95)), url('/fondo-universal.png');
   background-size: cover;
   background-attachment: fixed;
   min-height: 100vh;
 }
 
+.landing-bg {
+  background: linear-gradient(135deg, rgba(245,240,255,0.95), rgba(245,240,255,0.95)), url('/fondo-universal.png');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 .section-bg-club {
-  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/club.jpg');
+  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
 }
 
 .section-bg-gym {
-  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/gym.jpg');
+  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
 }
 
 .section-bg-treadmills {
-  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('/treadmills.jpg');
+  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
 }
 
 .section-bg-women {
-  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/two-women-training.jpg');
+  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
 }
 
 .card-bg-gym {
-  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/gym.jpg');
+  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
 }
 
 .card-bg-club {
-  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/club-fitness.jpg');
+  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
 }
 
 .card-bg-dashboard {
-  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/dashboard-bg.jpg');
+  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/fondo-universal.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.motivational-quote {
+  background: linear-gradient(135deg, rgba(233,30,99,0.06), rgba(255,215,0,0.06));
+  border-left: 4px solid var(--pink);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.quote-text {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.quote-author {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  text-align: right;
+}
+
+.hero-overlay {
+  position: relative;
+  overflow: hidden;
+}
+.hero-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(245,240,255,0.88), rgba(245,240,255,0.88)), url('/fondo-universal.png');
   background-size: cover;
   background-position: center;
 }
