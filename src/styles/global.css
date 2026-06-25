@@ -34,8 +34,59 @@ body {
 }
 
 .auth-gradient {
-  background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
+  background: linear-gradient(135deg, rgba(245,240,255,0.92), rgba(245,240,255,0.92)), url('/login-bg.jpg');
+  background-size: cover;
+  background-position: center;
   min-height: 100vh;
+}
+
+.dashboard-bg {
+  background: linear-gradient(135deg, rgba(245,240,255,0.94), rgba(245,240,255,0.94)), url('/fondo.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.section-bg-club {
+  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/club.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.section-bg-gym {
+  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/gym.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.section-bg-treadmills {
+  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('/treadmills.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.section-bg-women {
+  background: linear-gradient(135deg, rgba(245,240,255,0.9), rgba(245,240,255,0.9)), url('/two-women-training.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.card-bg-gym {
+  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/gym.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.card-bg-club {
+  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/club-fitness.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.card-bg-dashboard {
+  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,255,255,0.97)), url('/dashboard-bg.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
 .auth-card, .glass-card {

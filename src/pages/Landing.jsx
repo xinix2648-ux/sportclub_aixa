@@ -56,7 +56,7 @@ export default function Landing() {
         </Container>
       </section>
 
-      <section className="py-5" style={{ background: '#fff' }}>
+      <section className="py-5 section-bg-treadmills">
         <Container>
           <h2 className="text-center text-pink fw-bold mb-1">¿Por qué elegirnos?</h2>
           <p className="text-center small-text mb-5">Todo lo que necesitas para alcanzar tus metas</p>
@@ -76,7 +76,7 @@ export default function Landing() {
         </Container>
       </section>
 
-      <section className="py-5" style={{ background: 'var(--bg-base)' }}>
+      <section className="py-5 section-bg-women">
         <Container>
           <Row className="g-4">
             {quotes.map((q, i) => (
@@ -91,11 +91,7 @@ export default function Landing() {
         </Container>
       </section>
 
-      <section className="py-5 position-relative" style={{ minHeight: 400, overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(135deg, #fce4ec, #f3e5f5)',
-        }} />
+      <section className="py-5 section-bg-club position-relative" style={{ minHeight: 400 }}>
         <Container className="position-relative">
           <Row className="justify-content-center">
             <Col md={8} className="text-center">

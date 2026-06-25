@@ -1,19 +1,32 @@
 import { useState, useEffect } from 'react'
-import { Container, Row, Col, Table, Button, Modal, Form, Spinner, Alert } from 'react-bootstrap'
-import { FaUsers, FaUserShield, FaChartLine, FaCogs } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { Container, Row, Col, Table, Button, Modal, Form, Spinner, Alert, Badge } from 'react-bootstrap'
+import { FaUsers, FaUserShield, FaChartLine, FaCogs, FaSearch, FaTimes, FaEye, FaKey, FaFileAlt, FaUserCog } from 'react-icons/fa'
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
 
 const initialForm = { full_name: '', email: '', password: '', role: 'user' }
 
 export default function DashboardAdmin() {
+  const navigate = useNavigate()
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [filterRole, setFilterRole] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+
   const [showModal, setShowModal] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(initialForm)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
+
+  const [showReportModal, setShowReportModal] = useState(false)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [detailUser, setDetailUser] = useState(null)
+  const [showResetPassModal, setShowResetPassModal] = useState(false)
+  const [resetPassUser, setResetPassUser] = useState(null)
+  const [resetPassword, setResetPassword] = useState('')
+  const [resetMsg, setResetMsg] = useState('')
 
   const loadUsers = () => {
     setLoading(true)
@@ -21,6 +34,26 @@ export default function DashboardAdmin() {
   }
 
   useEffect(() => { loadUsers() }, [])
+
+  const filteredUsers = users.filter((u) => {
+    if (filterRole && u.role !== filterRole) return false
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase()
+      return u.full_name?.toLowerCase().includes(term) || u.email?.toLowerCase().includes(term)
+    }
+    return true
+  })
+
+  const adminCount = users.filter((u) => u.role === 'admin').length
+  const coachCount = users.filter((u) => u.role === 'coach').length
+  const userCount = users.filter((u) => u.role === 'user').length
+
+  const stats = [
+    { icon: <FaUsers size={24} />, label: 'Usuarios', value: users.length, color: 'var(--admin-color)', filter: null },
+    { icon: <FaUserShield size={24} />, label: 'Administradores', value: adminCount, color: 'var(--admin-color)', filter: 'admin' },
+    { icon: <FaChartLine size={24} />, label: 'Entrenadores', value: coachCount, color: 'var(--admin-color)', filter: 'coach' },
+    { icon: <FaCogs size={24} />, label: 'Atletas', value: userCount, color: 'var(--admin-color)', filter: 'user' },
+  ]
 
   const openCreate = () => {
     setEditing(null); setForm(initialForm); setError(''); setShowModal(true)
@@ -46,35 +79,60 @@ export default function DashboardAdmin() {
     } finally { setSaving(false) }
   }
 
+  const handleResetPass = async () => {
+    if (!resetPassword || resetPassword.length < 8) {
+      setResetMsg('La contraseña debe tener al menos 8 caracteres')
+      return
+    }
+    setResetMsg(''); setSaving(true)
+    try {
+      await api.put(`/users/${resetPassUser.id}`, { password: resetPassword })
+      setResetMsg('Contraseña actualizada correctamente')
+      setResetPassword('')
+      setTimeout(() => { setShowResetPassModal(false); setResetMsg('') }, 1200)
+    } catch (err) {
+      setResetMsg(err.response?.data?.message || 'Error al cambiar contraseña')
+    } finally { setSaving(false) }
+  }
+
+  const openDetail = (user) => {
+    setDetailUser(user); setShowDetailModal(true)
+  }
+
+  const openResetPass = (user) => {
+    setResetPassUser(user); setResetPassword(''); setResetMsg(''); setShowResetPassModal(true)
+  }
+
   const roleBadgeClass = (role) => {
     if (role === 'admin') return 'badge-admin'
     if (role === 'coach') return 'badge-coach'
     return 'badge-user'
   }
+
   const roleLabel = (role) => {
     if (role === 'admin') return 'Admin'
     if (role === 'coach') return 'Coach'
     return 'User'
   }
 
-  const adminCount = users.filter((u) => u.role === 'admin').length
-  const coachCount = users.filter((u) => u.role === 'coach').length
-  const userCount = users.filter((u) => u.role === 'user').length
-
   return (
     <DashboardLayout>
       <Container fluid className="px-0">
         <h2 className="mb-1" style={{ color: 'var(--admin-color)' }}>Panel de Administración</h2>
         <p className="small-text mb-4">Control total del sistema Porcinos Sport Club</p>
+
         <Row className="g-3 mb-4">
-          {[
-            { icon: <FaUsers size={24} />, label: 'Usuarios', value: users.length, color: 'var(--admin-color)' },
-            { icon: <FaUserShield size={24} />, label: 'Administradores', value: adminCount, color: 'var(--admin-color)' },
-            { icon: <FaChartLine size={24} />, label: 'Entrenadores', value: coachCount, color: 'var(--admin-color)' },
-            { icon: <FaCogs size={24} />, label: 'Atletas', value: userCount, color: 'var(--admin-color)' },
-          ].map((s, i) => (
+          {stats.map((s, i) => (
             <Col xs={6} lg={3} key={i}>
-              <div className="stat-card d-flex align-items-center gap-3">
+              <div
+                className="stat-card d-flex align-items-center gap-3"
+                style={{
+                  cursor: 'pointer',
+                  border: filterRole === s.filter ? `2px solid ${s.color}` : '1px solid var(--glass-border)',
+                  background: filterRole === s.filter ? `${s.color}08` : 'var(--bg-card)',
+                }}
+                onClick={() => setFilterRole(filterRole === s.filter ? null : s.filter)}
+              >
                 <div style={{ color: s.color, background: `${s.color}12`, width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {s.icon}
                 </div>
@@ -86,42 +144,73 @@ export default function DashboardAdmin() {
             </Col>
           ))}
         </Row>
+
         <Row className="g-4">
           <Col lg={8}>
             <div className="list-card">
-              <div className="d-flex justify-content-between align-items-center mb-3">
+              <div className="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
                 <h5 className="mb-0 d-flex align-items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                   <FaUsers style={{ color: 'var(--admin-color)' }} /> Usuarios del Sistema
+                  {filterRole && (
+                    <Badge bg="" className="badge-role badge-admin ms-2 d-flex align-items-center gap-1" style={{ cursor: 'pointer' }} onClick={() => setFilterRole(null)}>
+                      {roleLabel(filterRole)} <FaTimes size={10} />
+                    </Badge>
+                  )}
+                  {searchTerm && (
+                    <Badge bg="" className="badge-role badge-user ms-1 d-flex align-items-center gap-1" style={{ cursor: 'pointer' }} onClick={() => setSearchTerm('')}>
+                      "{searchTerm}" <FaTimes size={10} />
+                    </Badge>
+                  )}
                 </h5>
-                <Button className="btn-pink btn-sm" onClick={openCreate}>+ Nuevo</Button>
+                <div className="d-flex gap-2">
+                  <div className="position-relative">
+                    <FaSearch style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', fontSize: 12 }} />
+                    <Form.Control
+                      size="sm"
+                      placeholder="Buscar nombre o email..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{ paddingLeft: 30, width: 220, borderRadius: 20 }}
+                    />
+                  </div>
+                  <Button className="btn-pink btn-sm" onClick={openCreate}>+ Nuevo</Button>
+                </div>
               </div>
               {loading ? <div className="text-center py-3"><Spinner variant="dark" size="sm" /></div> : (
                 <Table className="table-custom mb-0" size="sm">
-                  <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th></tr></thead>
+                  <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th style={{ width: 160 }}>Acciones</th></tr></thead>
                   <tbody>
-                    {users.map((u) => (
-                      <tr key={u.id}>
-                        <td className="small-text">{u.id}</td>
-                        <td>{u.full_name}</td>
-                        <td className="small-text">{u.email}</td>
-                        <td><span className={`badge-role ${roleBadgeClass(u.role)}`}>{roleLabel(u.role)}</span></td>
-                        <td>
-                          <Button variant="outline-dark" size="sm" onClick={() => openEdit(u)}>Editar</Button>
-                        </td>
-                      </tr>
-                    ))}
+                    {filteredUsers.length === 0 ? (
+                      <tr><td colSpan={5} className="text-center small-text py-3">No se encontraron usuarios</td></tr>
+                    ) : (
+                      filteredUsers.map((u) => (
+                        <tr key={u.id}>
+                          <td className="small-text">{u.id}</td>
+                          <td>{u.full_name}</td>
+                          <td className="small-text">{u.email}</td>
+                          <td><span className={`badge-role ${roleBadgeClass(u.role)}`}>{roleLabel(u.role)}</span></td>
+                          <td>
+                            <div className="d-flex gap-1">
+                              <Button variant="outline-dark" size="sm" onClick={() => openDetail(u)} title="Ver detalles"><FaEye /></Button>
+                              <Button variant="outline-dark" size="sm" onClick={() => openEdit(u)} title="Editar"><FaUserCog /></Button>
+                              <Button variant="outline-dark" size="sm" onClick={() => openResetPass(u)} title="Resetear contraseña"><FaKey /></Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </Table>
               )}
             </div>
           </Col>
           <Col lg={4}>
-            <div className="list-card mb-3">
+            <div className="list-card mb-3 card-bg-club">
               <h5 className="mb-3" style={{ color: 'var(--text-primary)' }}>Acciones Rápidas</h5>
               <div className="d-grid gap-2">
-                <Button className="btn-pink btn-sm" onClick={openCreate}>Crear Usuario</Button>
-                <Button variant="outline-dark" size="sm">Ver Reportes</Button>
-                <Button variant="outline-dark" size="sm">Configuración</Button>
+                <Button className="btn-pink btn-sm" onClick={openCreate}><FaUserCog className="me-1" /> Crear Usuario</Button>
+                <Button variant="outline-dark" size="sm" onClick={() => setShowReportModal(true)}><FaFileAlt className="me-1" /> Ver Reportes</Button>
+                <Button variant="outline-dark" size="sm" onClick={() => navigate('/dashboard/perfil')}><FaCogs className="me-1" /> Configuración</Button>
               </div>
             </div>
             <div className="list-card">
@@ -167,6 +256,108 @@ export default function DashboardAdmin() {
           <Button className="btn-pink btn-sm" onClick={handleSave} disabled={saving}>
             {saving ? <Spinner size="sm" /> : editing ? 'Guardar Cambios' : 'Crear Usuario'}
           </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDetailModal} onHide={() => setShowDetailModal(false)} centered className="modal-custom">
+        <Modal.Header closeButton><Modal.Title>Detalle del Usuario</Modal.Title></Modal.Header>
+        <Modal.Body>
+          {detailUser && (
+            <div>
+              <div className="text-center mb-4">
+                <div style={{
+                  width: 64, height: 64, borderRadius: '50%',
+                  background: `linear-gradient(135deg, var(--admin-color), var(--admin-color)88)`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 700, fontSize: '1.5rem', color: '#fff', margin: '0 auto'
+                }}>
+                  {detailUser.full_name?.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2) || '??'}
+                </div>
+                <h5 className="mt-2 mb-0">{detailUser.full_name}</h5>
+                <span className={`badge-role ${roleBadgeClass(detailUser.role)}`}>{roleLabel(detailUser.role)}</span>
+              </div>
+              <table className="table table-custom table-borderless mb-0">
+                <tbody>
+                  <tr><td className="small-text" style={{ width: 140 }}>ID</td><td><strong>{detailUser.id}</strong></td></tr>
+                  <tr><td className="small-text">Email</td><td><strong>{detailUser.email}</strong></td></tr>
+                  <tr><td className="small-text">Rol</td><td><strong>{roleLabel(detailUser.role)}</strong></td></tr>
+                  <tr><td className="small-text">Fecha nac.</td><td><strong>{detailUser.birth_date || '—'}</strong></td></tr>
+                  <tr><td className="small-text">Creado</td><td><strong>{new Date(detailUser.created_at).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong></td></tr>
+                  <tr><td className="small-text">Actualizado</td><td><strong>{new Date(detailUser.updated_at).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong></td></tr>
+                  <tr><td className="small-text">Metadata</td><td><strong>{detailUser.metadata ? JSON.stringify(detailUser.metadata) : '—'}</strong></td></tr>
+                  <tr><td className="small-text">Debe cambiar pass</td><td><strong>{detailUser.must_change_password ? 'Sí' : 'No'}</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" size="sm" onClick={() => setShowDetailModal(false)}>Cerrar</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showResetPassModal} onHide={() => setShowResetPassModal(false)} centered className="modal-custom">
+        <Modal.Header closeButton><Modal.Title>Resetear Contraseña</Modal.Title></Modal.Header>
+        <Modal.Body>
+          {resetPassUser && <p className="small-text mb-3">Nueva contraseña para <strong>{resetPassUser.full_name}</strong> ({resetPassUser.email})</p>}
+          {resetMsg && <Alert variant={resetMsg.includes('correctamente') ? 'success' : 'danger'} className="py-2 small">{resetMsg}</Alert>}
+          <Form.Group>
+            <Form.Label className="small-text">Nueva contraseña</Form.Label>
+            <Form.Control type="password" value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} placeholder="Mín. 8 caracteres" minLength={8} />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" size="sm" onClick={() => { setShowResetPassModal(false); setResetMsg('') }}>Cancelar</Button>
+          <Button className="btn-pink btn-sm" onClick={handleResetPass} disabled={saving}>
+            {saving ? <Spinner size="sm" /> : 'Actualizar Contraseña'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showReportModal} onHide={() => setShowReportModal(false)} size="lg" centered className="modal-custom">
+        <Modal.Header closeButton><Modal.Title><FaFileAlt className="me-2" />Reportes del Sistema</Modal.Title></Modal.Header>
+        <Modal.Body>
+          <Row className="g-3 mb-4">
+            <Col xs={4}><div className="text-center p-3" style={{ background: 'var(--bg-base)', borderRadius: 12 }}><h3 className="fw-bold mb-0" style={{ color: 'var(--admin-color)' }}>{users.length}</h3><p className="small-text mb-0">Total</p></div></Col>
+            <Col xs={4}><div className="text-center p-3" style={{ background: 'var(--bg-base)', borderRadius: 12 }}><h3 className="fw-bold mb-0" style={{ color: 'var(--admin-color)' }}>{adminCount}</h3><p className="small-text mb-0">Admins</p></div></Col>
+            <Col xs={4}><div className="text-center p-3" style={{ background: 'var(--bg-base)', borderRadius: 12 }}><h3 className="fw-bold mb-0" style={{ color: 'var(--admin-color)' }}>{coachCount}</h3><p className="small-text mb-0">Coaches</p></div></Col>
+          </Row>
+          <div className="mb-4">
+            <p className="small-text mb-2">Distribución por rol</p>
+            <div className="d-flex gap-1" style={{ height: 28, borderRadius: 14, overflow: 'hidden' }}>
+              {users.length > 0 && (
+                <>
+                  <div style={{ flex: adminCount, background: 'var(--admin-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 600, minWidth: adminCount > 0 ? 40 : 0 }}>
+                    {adminCount > 0 && `Admin ${Math.round(adminCount/users.length*100)}%`}
+                  </div>
+                  <div style={{ flex: coachCount, background: 'var(--coach-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 600, minWidth: coachCount > 0 ? 40 : 0 }}>
+                    {coachCount > 0 && `Coach ${Math.round(coachCount/users.length*100)}%`}
+                  </div>
+                  <div style={{ flex: userCount, background: 'var(--user-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 600, minWidth: userCount > 0 ? 40 : 0 }}>
+                    {userCount > 0 && `User ${Math.round(userCount/users.length*100)}%`}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+          <h6 className="mb-2" style={{ color: 'var(--text-primary)' }}>Usuarios Registrados</h6>
+          <Table className="table-custom mb-0" size="sm">
+            <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Registro</th></tr></thead>
+            <tbody>
+              {[...users].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((u) => (
+                <tr key={u.id}>
+                  <td className="small-text">{u.id}</td>
+                  <td>{u.full_name}</td>
+                  <td className="small-text">{u.email}</td>
+                  <td><span className={`badge-role ${roleBadgeClass(u.role)}`}>{roleLabel(u.role)}</span></td>
+                  <td className="small-text">{new Date(u.created_at).toLocaleDateString('es-CL')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" size="sm" onClick={() => setShowReportModal(false)}>Cerrar</Button>
         </Modal.Footer>
       </Modal>
     </DashboardLayout>
