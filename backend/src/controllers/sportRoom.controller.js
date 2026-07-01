@@ -1,13 +1,10 @@
 const sportRoomService = require("../services/sportRoom.service");
+const { success } = require("../utils/api-response");
 
 async function index(req, res, next) {
     try {
         const sportRooms = await sportRoomService.getAllSportRooms(req.query);
-
-        return res.json({
-            ok: true,
-            data: sportRooms
-        });
+        return success(res, "Asignaciones obtenidas correctamente.", sportRooms);
     } catch (error) {
         next(error);
     }
@@ -16,11 +13,7 @@ async function index(req, res, next) {
 async function show(req, res, next) {
     try {
         const sportRoom = await sportRoomService.getSportRoomById(req.params.id);
-
-        return res.json({
-            ok: true,
-            data: sportRoom
-        });
+        return success(res, "Asignación obtenida correctamente.", sportRoom);
     } catch (error) {
         next(error);
     }
@@ -29,12 +22,7 @@ async function show(req, res, next) {
 async function store(req, res, next) {
     try {
         const sportRoom = await sportRoomService.createSportRoom(req.body);
-
-        return res.status(201).json({
-            ok: true,
-            message: "Asignación creada correctamente.",
-            data: sportRoom
-        });
+        return success(res, "Asignación creada correctamente.", sportRoom, 201);
     } catch (error) {
         next(error);
     }
@@ -46,12 +34,7 @@ async function update(req, res, next) {
             req.params.id,
             req.body
         );
-
-        return res.json({
-            ok: true,
-            message: "Asignación actualizada correctamente.",
-            data: sportRoom
-        });
+        return success(res, "Asignación actualizada correctamente.", sportRoom);
     } catch (error) {
         next(error);
     }
@@ -60,11 +43,7 @@ async function update(req, res, next) {
 async function destroy(req, res, next) {
     try {
         await sportRoomService.deleteSportRoom(req.params.id);
-
-        return res.json({
-            ok: true,
-            message: "Asignación eliminada correctamente."
-        });
+        return success(res, "Asignación eliminada correctamente.");
     } catch (error) {
         next(error);
     }

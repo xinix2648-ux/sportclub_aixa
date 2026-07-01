@@ -11,16 +11,19 @@ async function getMySchedules(coachId) {
 async function getMyRooms(coachId) {
     const sportRooms = await coachRepository.findMyRooms(coachId);
 
-    return sportRooms.map((item) => ({
-        id: item.room.id,
-        name: item.room.name,
-        description: item.room.description,
-        capacity: item.room.capacity,
-        location: item.room.location,
-        observation: item.room.observation,
-        status: item.room.status,
-        sport: item.sport
-    }));
+    return sportRooms.map((item) => {
+        const room = item.room || {}
+        return {
+            id: room.id,
+            name: room.name,
+            description: room.description,
+            capacity: room.capacity,
+            location: room.location,
+            observation: room.observation,
+            status: room.status,
+            sport: item.sport
+        }
+    });
 }
 
 async function getDashboard(coachId) {

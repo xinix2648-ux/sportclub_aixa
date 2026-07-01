@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Row, Col, Table, Button, Modal, Form, Spinner, Alert, Badge } from 'react-bootstrap'
 import { FaUsers, FaUserShield, FaChartLine, FaCogs, FaSearch, FaTimes, FaEye, FaKey, FaFileAlt, FaUserCog, FaQuoteLeft } from 'react-icons/fa'
@@ -26,14 +26,15 @@ export default function DashboardAdmin() {
   const [showResetPassModal, setShowResetPassModal] = useState(false)
   const [resetPassUser, setResetPassUser] = useState(null)
   const [resetPassword, setResetPassword] = useState('')
+  const [resetConfirm, setResetConfirm] = useState('')
   const [resetMsg, setResetMsg] = useState('')
 
-  const loadUsers = () => {
+  const loadUsers = useCallback(() => {
     setLoading(true)
-    api.get('/users').then((res) => { setUsers(res.data.data || []); setLoading(false) }).catch(() => setLoading(false))
-  }
+    api.get('/users').then((res) => { setUsers(res.data.data || []); setLoading(false) }).catch(() => { setLoading(false); Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudieron cargar los usuarios', timer: 2000, showConfirmButton: false }) })
+  }, [])
 
-  useEffect(() => { loadUsers() }, [])
+  useEffect(() => { loadUsers() }, [loadUsers])
 
   const filteredUsers = users.filter((u) => {
     if (filterRole && u.role !== filterRole) return false
@@ -51,8 +52,8 @@ export default function DashboardAdmin() {
   const stats = [
     { icon: <FaUsers size={24} />, label: 'Usuarios', value: users.length, color: 'var(--admin-color)', filter: null },
     { icon: <FaUserShield size={24} />, label: 'Administradores', value: adminCount, color: 'var(--admin-color)', filter: 'admin' },
-    { icon: <FaChartLine size={24} />, label: 'Entrenadores', value: coachCount, color: 'var(--admin-color)', filter: 'coach' },
-    { icon: <FaCogs size={24} />, label: 'Atletas', value: userCount, color: 'var(--admin-color)', filter: 'user' },
+    { icon: <FaChartLine size={24} />, label: 'Entrenadores', value: coachCount, color: 'var(--coach-color)', filter: 'coach' },
+    { icon: <FaCogs size={24} />, label: 'Atletas', value: userCount, color: 'var(--user-color)', filter: 'user' },
   ]
 
   const openCreate = () => {
@@ -84,11 +85,15 @@ export default function DashboardAdmin() {
       setResetMsg('La contraseña debe tener al menos 8 caracteres')
       return
     }
+    if (resetPassword !== resetConfirm) {
+      setResetMsg('Las contraseñas no coinciden')
+      return
+    }
     setResetMsg(''); setSaving(true)
     try {
       await api.put(`/users/${resetPassUser.id}`, { password: resetPassword })
       setResetMsg('Contraseña actualizada correctamente')
-      setResetPassword('')
+      setResetPassword(''); setResetConfirm('')
       setTimeout(() => { setShowResetPassModal(false); setResetMsg('') }, 1200)
     } catch (err) {
       setResetMsg(err.response?.data?.message || 'Error al cambiar contraseña')
@@ -100,7 +105,7 @@ export default function DashboardAdmin() {
   }
 
   const openResetPass = (user) => {
-    setResetPassUser(user); setResetPassword(''); setResetMsg(''); setShowResetPassModal(true)
+    setResetPassUser(user); setResetPassword(''); setResetConfirm(''); setResetMsg(''); setShowResetPassModal(true)
   }
 
   const roleBadgeClass = (role) => {
@@ -229,7 +234,7 @@ export default function DashboardAdmin() {
         </Row>
       </Container>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered className="modal-custom">
+      <Modal show={showModal} onHide={() => { setShowModal(false); setForm(initialForm); setEditing(null); setError('') }} centered className="modal-custom">
         <Modal.Header closeButton><Modal.Title>{editing ? 'Editar Usuario' : 'Crear Usuario'}</Modal.Title></Modal.Header>
         <Modal.Body>
           {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
@@ -306,9 +311,13 @@ export default function DashboardAdmin() {
         <Modal.Body>
           {resetPassUser && <p className="small-text mb-3">Nueva contraseña para <strong>{resetPassUser.full_name}</strong> ({resetPassUser.email})</p>}
           {resetMsg && <Alert variant={resetMsg.includes('correctamente') ? 'success' : 'danger'} className="py-2 small">{resetMsg}</Alert>}
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label className="small-text">Nueva contraseña</Form.Label>
             <Form.Control type="password" value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} placeholder="Mín. 8 caracteres" minLength={8} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className="small-text">Confirmar contraseña</Form.Label>
+            <Form.Control type="password" value={resetConfirm} onChange={(e) => setResetConfirm(e.target.value)} placeholder="Repite la contraseña" />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

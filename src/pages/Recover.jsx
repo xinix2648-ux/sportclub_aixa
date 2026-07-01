@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button, Container, Row, Col, Spinner } from 'react-bootstrap'
 import Swal from 'sweetalert2'
+import api from '../services/api'
 
 export default function Recover() {
   const [email, setEmail] = useState('')
@@ -10,14 +11,19 @@ export default function Recover() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1200))
-    setLoading(false)
-    Swal.fire({
-      icon: 'success',
-      title: 'Correo enviado',
-      text: `Se ha enviado un enlace de recuperación a ${email}`,
-      confirmButtonColor: '#e91e63',
-    })
+    try {
+      await api.post('/auth/recover', { email })
+      Swal.fire({
+        icon: 'success',
+        title: 'Correo enviado',
+        text: `Si el correo ${email} está registrado, recibirás un enlace de recuperación.`,
+        confirmButtonColor: '#e91e63',
+      })
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: 'Error', text: err.response?.data?.message || 'Error al enviar el correo' })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

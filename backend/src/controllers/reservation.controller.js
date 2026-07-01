@@ -1,17 +1,10 @@
 const reservationService = require("../services/reservation.service");
-
-function getUserId(req) {
-    return req.user?.id;
-}
+const { success } = require("../utils/api-response");
 
 async function index(req, res, next) {
     try {
         const data = await reservationService.getAllReservations(req.query);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Reservas obtenidas correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -19,14 +12,9 @@ async function index(req, res, next) {
 
 async function myReservations(req, res, next) {
     try {
-        const userId = getUserId(req);
-
+        const userId = req.user?.id;
         const data = await reservationService.getMyReservations(userId);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Reservas obtenidas correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -34,18 +22,9 @@ async function myReservations(req, res, next) {
 
 async function store(req, res, next) {
     try {
-        const userId = getUserId(req);
-
-        const reservation = await reservationService.createReservation(
-            userId,
-            req.body
-        );
-
-        return res.status(201).json({
-            ok: true,
-            message: "Reserva creada correctamente.",
-            data: reservation
-        });
+        const userId = req.user?.id;
+        const reservation = await reservationService.createReservation(userId, req.body);
+        return success(res, "Reserva creada correctamente.", reservation, 201);
     } catch (error) {
         next(error);
     }
@@ -53,18 +32,9 @@ async function store(req, res, next) {
 
 async function cancel(req, res, next) {
     try {
-        const userId = getUserId(req);
-
-        const reservation = await reservationService.cancelReservation(
-            userId,
-            req.params.id
-        );
-
-        return res.json({
-            ok: true,
-            message: "Reserva cancelada correctamente.",
-            data: reservation
-        });
+        const userId = req.user?.id;
+        const reservation = await reservationService.cancelReservation(userId, req.params.id);
+        return success(res, "Reserva cancelada correctamente.", reservation);
     } catch (error) {
         next(error);
     }

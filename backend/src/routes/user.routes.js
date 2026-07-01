@@ -5,7 +5,7 @@ const { authenticate, authorizeRole } = require('../middlewares/auth.middleware'
 const router = Router();
 
 router.use(authenticate);
-router.get('/', authorizeRole(['admin']), userController.getAll);
+router.get('/', authorizeRole(['admin', 'coach']), userController.getAll);
 router.get('/:id', authorizeRole(['admin']), userController.getById);
 router.post('/', authorizeRole(['admin']), userController.create);
 router.put('/:id', authorizeRole(['admin']), userController.update);

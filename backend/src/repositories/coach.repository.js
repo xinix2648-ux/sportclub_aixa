@@ -18,7 +18,7 @@ async function findMyClasses(coachId) {
             {
                 model: User,
                 as: "coach",
-                attributes: ["id", "email", "role"]
+                attributes: ["id", "full_name", "email", "role"]
             },
             {
                 model: ClassSchedule,
@@ -62,7 +62,7 @@ async function findMySchedules(coachId) {
                     {
                         model: User,
                         as: "coach",
-                        attributes: ["id", "email", "role"]
+                        attributes: ["id", "full_name", "email", "role"]
                     }
                 ]
             }

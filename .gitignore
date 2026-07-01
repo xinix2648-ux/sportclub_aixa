@@ -5,3 +5,5 @@ dist
 .DS_Store
 *.zip
 *.avif
+temp_extract/
+*.pdf

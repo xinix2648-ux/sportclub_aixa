@@ -95,10 +95,12 @@ export default function DashboardSports() {
   }
 
   const handleToggle = async (sport) => {
+    const prevStatus = sport.status
+    setSports((prev) => prev.map((s) => (s.id === sport.id ? { ...s, status: !prevStatus } : s)))
     try {
-      const updated = await toggleSportStatus(sport.id, !sport.status)
-      setSports((prev) => prev.map((s) => (s.id === sport.id ? { ...s, status: updated.status } : s)))
+      await toggleSportStatus(sport.id, !prevStatus)
     } catch (err) {
+      setSports((prev) => prev.map((s) => (s.id === sport.id ? { ...s, status: prevStatus } : s)))
       Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo cambiar el estado' })
     }
   }

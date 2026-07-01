@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Container, Row, Col, Table, Spinner, Modal, Button } from 'react-bootstrap'
 import { FaCalendarCheck, FaDumbbell, FaClock, FaFire, FaEye, FaQuoteLeft, FaUserTie, FaMapMarkerAlt } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
 import { getUser } from '../services/authService'
+
+const DAYS = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
 
 export default function DashboardUsuario() {
   const [userData, setUserData] = useState(null)
@@ -15,25 +17,29 @@ export default function DashboardUsuario() {
   const [view, setView] = useState('reservas')
   const [showDetail, setShowDetail] = useState(null)
 
+  const mounted = useRef(true)
   useEffect(() => {
+    mounted.current = true
     Promise.all([
-      api.get('/auth/me'),
-      api.get('/member/dashboard'),
-      api.get('/member/classes'),
-      api.get('/reservations/my-reservations'),
+      api.get('/auth/me').catch(() => ({ data: { data: null } })),
+      api.get('/member/dashboard').catch(() => ({ data: { data: null } })),
+      api.get('/member/classes').catch(() => ({ data: { data: [] } })),
+      api.get('/reservations/my-reservations').catch(() => ({ data: { data: [] } })),
     ])
       .then(([meRes, dashRes, classesRes, reservationsRes]) => {
-        setUserData(meRes.data.data)
+        if (!mounted.current) return
+        setUserData(meRes.data.data || getUser())
         setDashData(dashRes.data.data)
         setClasses(classesRes.data.data || [])
         setReservations(reservationsRes.data.data || [])
       })
       .catch(() => {
-        const fallback = getUser()
-        setUserData(fallback)
+        if (!mounted.current) return
+        setUserData(getUser())
         Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudieron cargar los datos del panel', timer: 3000, showConfirmButton: false })
       })
-      .finally(() => setLoading(false))
+      .finally(() => { if (mounted.current) setLoading(false) })
+    return () => { mounted.current = false }
   }, [])
 
   const activeReservations = reservations.filter((r) => r.status === 'active')
@@ -43,7 +49,7 @@ export default function DashboardUsuario() {
     const sr = cs.sportRoom || {}
     return {
       id: r.id,
-      date: cs.day_of_week ? `Día ${cs.day_of_week}` : '—',
+      date: cs.day_of_week ? DAYS[cs.day_of_week] || `Día ${cs.day_of_week}` : '—',
       time: cs.start_time?.slice(0, 5) || '—',
       type: sr.sport?.name || '—',
       coach: sr.coach?.full_name || sr.coach?.email || '—',
@@ -54,7 +60,7 @@ export default function DashboardUsuario() {
 
   const mappedClasses = classes.map((c) => {
     const scheduleStr = (c.schedules || []).map((sch) =>
-      `Día ${sch.day_of_week} ${sch.start_time?.slice(0, 5)}`
+      `${DAYS[sch.day_of_week] || `Día ${sch.day_of_week}`} ${sch.start_time?.slice(0, 5)}`
     ).join(', ') || '—'
     return {
       id: c.id,
@@ -72,7 +78,7 @@ export default function DashboardUsuario() {
     { icon: <FaCalendarCheck size={24} />, label: 'Reservas activas', value: activeReservations.length.toString(), key: 'reservas', color: 'var(--user-color)' },
     { icon: <FaDumbbell size={24} />, label: 'Clases disponibles', value: (dashData?.available_classes ?? classes.length).toString(), key: 'clases', color: 'var(--user-color)' },
     { icon: <FaClock size={24} />, label: 'Próximas clases', value: (dashData?.available_classes ?? classes.length).toString(), key: 'horas', color: 'var(--user-color)' },
-    { icon: <FaFire size={24} />, label: 'Deportes', value: (dashData?.available_sports ?? '—').toString(), key: 'racha', color: 'var(--user-color)' },
+    { icon: <FaFire size={24} />, label: 'Deportes', value: ((dashData?.available_sports ?? 0) || 0).toString(), key: 'racha', color: 'var(--user-color)' },
   ]
 
   if (loading) return <DashboardLayout><div className="text-center py-5"><Spinner variant="dark" /></div></DashboardLayout>

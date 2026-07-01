@@ -1,26 +1,11 @@
 const coachService = require("../services/coach.service");
-
-function getCoachId(req) {
-    return req.user?.id;
-}
+const { success } = require("../utils/api-response");
 
 async function myClasses(req, res, next) {
     try {
-        const coachId = getCoachId(req);
-
-        if (!coachId) {
-            return res.status(401).json({
-                ok: false,
-                message: "No autorizado. Debe iniciar sesión como coach."
-            });
-        }
-
+        const coachId = req.user?.id;
         const data = await coachService.getMyClasses(coachId);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Clases obtenidas correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -28,21 +13,9 @@ async function myClasses(req, res, next) {
 
 async function mySchedules(req, res, next) {
     try {
-        const coachId = getCoachId(req);
-
-        if (!coachId) {
-            return res.status(401).json({
-                ok: false,
-                message: "No autorizado. Debe iniciar sesión como coach."
-            });
-        }
-
+        const coachId = req.user?.id;
         const data = await coachService.getMySchedules(coachId);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Horarios obtenidos correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -50,21 +23,9 @@ async function mySchedules(req, res, next) {
 
 async function myRooms(req, res, next) {
     try {
-        const coachId = getCoachId(req);
-
-        if (!coachId) {
-            return res.status(401).json({
-                ok: false,
-                message: "No autorizado. Debe iniciar sesión como coach."
-            });
-        }
-
+        const coachId = req.user?.id;
         const data = await coachService.getMyRooms(coachId);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Salas obtenidas correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -72,21 +33,9 @@ async function myRooms(req, res, next) {
 
 async function dashboard(req, res, next) {
     try {
-        const coachId = getCoachId(req);
-
-        if (!coachId) {
-            return res.status(401).json({
-                ok: false,
-                message: "No autorizado. Debe iniciar sesión como coach."
-            });
-        }
-
+        const coachId = req.user?.id;
         const data = await coachService.getDashboard(coachId);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Dashboard obtenido correctamente.", data);
     } catch (error) {
         next(error);
     }

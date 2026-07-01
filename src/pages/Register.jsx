@@ -28,7 +28,7 @@ export default function Register() {
         metadata: { sports: [] }
       })
       const dashboards = { user: '/dashboard/user', coach: '/dashboard/coach', admin: '/dashboard/admin' }
-      navigate(dashboards[user.role])
+      navigate(dashboards[user.role] || '/login')
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrarse')
     } finally {
@@ -53,19 +53,19 @@ export default function Register() {
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 text-start">
                   <Form.Label className="small-text">Nombre completo</Form.Label>
-                  <Form.Control name="full_name" placeholder="Tu nombre" value={form.full_name} onChange={handleChange} required />
+                  <Form.Control autoComplete="name" name="full_name" placeholder="Tu nombre" value={form.full_name} onChange={handleChange} required />
                 </Form.Group>
                 <Form.Group className="mb-3 text-start">
                   <Form.Label className="small-text">Email</Form.Label>
-                  <Form.Control type="email" name="email" placeholder="tu@email.com" value={form.email} onChange={handleChange} required />
+                  <Form.Control type="email" autoComplete="email" name="email" placeholder="tu@email.com" value={form.email} onChange={handleChange} required />
                 </Form.Group>
                 <Form.Group className="mb-3 text-start">
                   <Form.Label className="small-text">Contraseña</Form.Label>
-                  <Form.Control type="password" name="password" placeholder="Mín. 8 caracteres" value={form.password} onChange={handleChange} required minLength={8} />
+                  <Form.Control type="password" autoComplete="new-password" name="password" placeholder="Mín. 8 caracteres" value={form.password} onChange={handleChange} required minLength={8} />
                 </Form.Group>
                 <Form.Group className="mb-4 text-start">
                   <Form.Label className="small-text">Confirmar contraseña</Form.Label>
-                  <Form.Control type="password" name="confirm" placeholder="Repite la contraseña" value={form.confirm} onChange={handleChange} required />
+                  <Form.Control type="password" autoComplete="new-password" name="confirm" placeholder="Repite la contraseña" value={form.confirm} onChange={handleChange} required />
                 </Form.Group>
                 <Button type="submit" className="btn-pink w-100" disabled={loading}>
                   {loading ? <Spinner size="sm" /> : 'Crear Cuenta'}

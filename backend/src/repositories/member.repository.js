@@ -27,7 +27,7 @@ async function findAvailableClasses(filters = {}) {
             {
                 model: User,
                 as: "coach",
-                attributes: ["id", "email", "role"]
+                attributes: ["id", "full_name", "email", "role"]
             },
             {
                 model: ClassSchedule,
@@ -54,7 +54,7 @@ async function findClassById(id) {
             {
                 model: User,
                 as: "coach",
-                attributes: ["id", "email", "role"]
+                attributes: ["id", "full_name", "email", "role"]
             },
             {
                 model: ClassSchedule,

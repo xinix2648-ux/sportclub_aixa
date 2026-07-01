@@ -1,13 +1,10 @@
 const classScheduleService = require("../services/classSchedule.service");
+const { success } = require("../utils/api-response");
 
 async function index(req, res, next) {
     try {
         const schedules = await classScheduleService.getAllClassSchedules(req.query);
-
-        return res.json({
-            ok: true,
-            data: schedules
-        });
+        return success(res, "Horarios obtenidos correctamente.", schedules);
     } catch (error) {
         next(error);
     }
@@ -16,11 +13,7 @@ async function index(req, res, next) {
 async function show(req, res, next) {
     try {
         const schedule = await classScheduleService.getClassScheduleById(req.params.id);
-
-        return res.json({
-            ok: true,
-            data: schedule
-        });
+        return success(res, "Horario obtenido correctamente.", schedule);
     } catch (error) {
         next(error);
     }
@@ -29,12 +22,7 @@ async function show(req, res, next) {
 async function store(req, res, next) {
     try {
         const schedule = await classScheduleService.createClassSchedule(req.body);
-
-        return res.status(201).json({
-            ok: true,
-            message: "Horario creado correctamente.",
-            data: schedule
-        });
+        return success(res, "Horario creado correctamente.", schedule, 201);
     } catch (error) {
         next(error);
     }
@@ -46,12 +34,7 @@ async function update(req, res, next) {
             req.params.id,
             req.body
         );
-
-        return res.json({
-            ok: true,
-            message: "Horario actualizado correctamente.",
-            data: schedule
-        });
+        return success(res, "Horario actualizado correctamente.", schedule);
     } catch (error) {
         next(error);
     }
@@ -60,11 +43,7 @@ async function update(req, res, next) {
 async function destroy(req, res, next) {
     try {
         await classScheduleService.deleteClassSchedule(req.params.id);
-
-        return res.json({
-            ok: true,
-            message: "Horario eliminado correctamente."
-        });
+        return success(res, "Horario eliminado correctamente.");
     } catch (error) {
         next(error);
     }

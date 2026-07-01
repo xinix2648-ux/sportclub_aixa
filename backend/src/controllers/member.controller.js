@@ -1,13 +1,10 @@
 const memberService = require("../services/member.service");
+const { success } = require("../utils/api-response");
 
 async function dashboard(req, res, next) {
     try {
         const data = await memberService.getDashboard();
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Dashboard obtenido correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -16,11 +13,7 @@ async function dashboard(req, res, next) {
 async function classes(req, res, next) {
     try {
         const data = await memberService.getAvailableClasses(req.query);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Clases obtenidas correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -29,11 +22,7 @@ async function classes(req, res, next) {
 async function classDetail(req, res, next) {
     try {
         const data = await memberService.getClassById(req.params.id);
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Clase obtenida correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -42,11 +31,7 @@ async function classDetail(req, res, next) {
 async function sports(req, res, next) {
     try {
         const data = await memberService.getAvailableSports();
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Deportes obtenidos correctamente.", data);
     } catch (error) {
         next(error);
     }
@@ -55,11 +40,7 @@ async function sports(req, res, next) {
 async function rooms(req, res, next) {
     try {
         const data = await memberService.getAvailableRooms();
-
-        return res.json({
-            ok: true,
-            data
-        });
+        return success(res, "Salas obtenidas correctamente.", data);
     } catch (error) {
         next(error);
     }

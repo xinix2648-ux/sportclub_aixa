@@ -22,7 +22,7 @@ export default function Login() {
         return
       }
       const dashboards = { user: '/dashboard/user', coach: '/dashboard/coach', admin: '/dashboard/admin' }
-      navigate(dashboards[user.role])
+      navigate(dashboards[user.role] || '/login')
     } catch (err) {
       setError(err.response?.data?.message || 'Error al iniciar sesión')
     } finally {
@@ -57,11 +57,11 @@ export default function Login() {
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 text-start">
                   <Form.Label className="small-text">Email</Form.Label>
-                  <Form.Control type="email" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <Form.Control type="email" autoComplete="email" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </Form.Group>
                 <Form.Group className="mb-4 text-start">
                   <Form.Label className="small-text">Contraseña</Form.Label>
-                  <Form.Control type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  <Form.Control type="password" autoComplete="current-password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </Form.Group>
                 <Button type="submit" className="btn-pink w-100" disabled={loading}>
                   {loading ? <Spinner size="sm" /> : 'Iniciar Sesión'}

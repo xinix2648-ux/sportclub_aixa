@@ -117,10 +117,26 @@ async function changePassword(req, res, next) {
     }
 }
 
+async function recoverPassword(req, res, next) {
+    try {
+        const { email } = req.body;
+        if (!email || !String(email).trim()) {
+            return res.status(400).json({
+                ok: false,
+                message: 'El correo es obligatorio.'
+            });
+        }
+        return success(res, 'Si el correo está registrado, recibirás un enlace de recuperación.');
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     login,
     registerUser,
     me,
     updateMe,
-    changePassword
+    changePassword,
+    recoverPassword
 };

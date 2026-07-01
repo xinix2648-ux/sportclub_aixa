@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Container, Row, Col, Table, Spinner, Modal, Button, Form } from 'react-bootstrap'
 import { FaUserGraduate, FaChalkboardTeacher, FaCalendarAlt, FaClipboardList, FaSearch, FaEye, FaDumbbell, FaClock, FaMapMarkerAlt, FaQuoteLeft } from 'react-icons/fa'
 import Swal from 'sweetalert2'
@@ -16,23 +16,28 @@ export default function DashboardCoach() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showDetail, setShowDetail] = useState(null)
 
+  const mounted = useRef(true)
   useEffect(() => {
+    mounted.current = true
     Promise.all([
-      api.get('/users', { params: { role: 'user' } }),
-      api.get('/coach/dashboard'),
-      api.get('/coach/my-classes'),
-      api.get('/coach/my-schedules'),
+      api.get('/users', { params: { role: 'user' } }).catch(() => ({ data: { data: [] } })),
+      api.get('/coach/dashboard').catch(() => ({ data: { data: null } })),
+      api.get('/coach/my-classes').catch(() => ({ data: { data: [] } })),
+      api.get('/coach/my-schedules').catch(() => ({ data: { data: [] } })),
     ])
       .then(([usersRes, dashRes, classesRes, schedulesRes]) => {
+        if (!mounted.current) return
         setStudents(usersRes.data.data || [])
         setDashData(dashRes.data.data)
         setMyClasses(classesRes.data.data || [])
         setSchedules(schedulesRes.data.data || [])
       })
       .catch(() => {
+        if (!mounted.current) return
         Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudieron cargar los datos del panel', timer: 3000, showConfirmButton: false })
       })
-      .finally(() => setLoading(false))
+      .finally(() => { if (mounted.current) setLoading(false) })
+    return () => { mounted.current = false }
   }, [])
 
   const filteredStudents = students.filter((s) => {
