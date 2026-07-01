@@ -6,6 +6,7 @@ import Recover from './pages/Recover'
 import DashboardUsuario from './pages/DashboardUsuario'
 import DashboardCoach from './pages/DashboardCoach'
 import DashboardAdmin from './pages/DashboardAdmin'
+import DashboardSports from './pages/DashboardSports'
 import EditProfile from './pages/EditProfile'
 import ProtectedRoute from './routes/ProtectedRoute'
 import RoleRoute from './routes/RoleRoute'
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/dashboard/user" element={<RoleRoute role="user"><DashboardUsuario /></RoleRoute>} />
       <Route path="/dashboard/coach" element={<RoleRoute role="coach"><DashboardCoach /></RoleRoute>} />
       <Route path="/dashboard/admin" element={<RoleRoute role="admin"><DashboardAdmin /></RoleRoute>} />
+      <Route path="/dashboard/deportes" element={<RoleRoute role="admin"><DashboardSports /></RoleRoute>} />
       <Route path="/dashboard/perfil" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
       <Route path="*" element={<RedirectHome />} />
     </Routes>
