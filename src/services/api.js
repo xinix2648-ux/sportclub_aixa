@@ -12,13 +12,17 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+const publicPaths = ['/api/auth/login', '/api/auth/register']
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response && err.response.status === 401) {
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      window.location.href = '/login'
+      const url = err.config?.url || ''
+      if (!publicPaths.some((p) => url.startsWith(p))) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(err)
   }

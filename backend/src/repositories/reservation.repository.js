@@ -24,7 +24,7 @@ async function findAll(filters = {}) {
             {
                 model: User,
                 as: "user",
-                attributes: ["id", "email", "role"]
+                attributes: ["id", "email", "role", "full_name"]
             },
             {
                 model: ClassSchedule,
@@ -39,7 +39,7 @@ async function findAll(filters = {}) {
                             {
                                 model: User,
                                 as: "coach",
-                                attributes: ["id", "email", "role"]
+                                attributes: ["id", "email", "role", "full_name"]
                             }
                         ]
                     }
@@ -66,7 +66,7 @@ async function findById(id) {
                             {
                                 model: User,
                                 as: "coach",
-                                attributes: ["id", "email", "role"]
+                                attributes: ["id", "email", "role", "full_name"]
                             }
                         ]
                     }

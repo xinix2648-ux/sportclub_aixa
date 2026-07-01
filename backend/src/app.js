@@ -8,7 +8,10 @@ const { notFound, errorHandler } = require('./middlewares/error.middleware');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN || false : '*',
+  credentials: true
+}));
 app.use(express.json());
 app.use(morgan('dev'));
 

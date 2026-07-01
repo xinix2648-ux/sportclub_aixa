@@ -10,17 +10,20 @@ import DashboardSports from './pages/DashboardSports'
 import EditProfile from './pages/EditProfile'
 import ProtectedRoute from './routes/ProtectedRoute'
 import RoleRoute from './routes/RoleRoute'
+import ErrorBoundary from './components/ErrorBoundary'
 import { getToken, getUser } from './services/authService'
 
 function RedirectHome() {
   if (!getToken()) return <Landing />
   const user = getUser()
+  if (!user?.role) return <Navigate to="/login" replace />
   const map = { user: '/dashboard/user', coach: '/dashboard/coach', admin: '/dashboard/admin' }
-  return <Navigate to={map[user?.role] || '/'} replace />
+  return <Navigate to={map[user.role] || '/login'} replace />
 }
 
 export default function App() {
   return (
+    <ErrorBoundary>
     <Routes>
       <Route path="/" element={<RedirectHome />} />
       <Route path="/login" element={<Login />} />
@@ -33,5 +36,6 @@ export default function App() {
       <Route path="/dashboard/perfil" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
       <Route path="*" element={<RedirectHome />} />
     </Routes>
+    </ErrorBoundary>
   )
 }

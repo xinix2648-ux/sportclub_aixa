@@ -11,7 +11,7 @@ function errorHandler(err, req, res, next) {
     ok: false,
     message: err.message || 'Error interno del servidor.',
     errors: err.details || undefined,
-    stack: (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined) ? err.stack : undefined
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 }
 

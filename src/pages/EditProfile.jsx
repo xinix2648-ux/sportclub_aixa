@@ -43,7 +43,7 @@ export default function EditProfile() {
     try {
       const payload = { full_name, email }
       if (password) payload.password = password
-      const res = await api.put(`/users/${user.id}`, payload)
+      const res = await api.put(`/auth/me`, payload)
       const updated = res.data.data
       localStorage.setItem('user', JSON.stringify(updated))
       Swal.fire({ icon: 'success', title: 'Actualizado', text: 'Perfil actualizado correctamente', timer: 1500, showConfirmButton: false })

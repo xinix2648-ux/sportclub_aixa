@@ -8,7 +8,9 @@ import { listSports, createSport, updateSport, deleteSport, toggleSportStatus } 
 const initialForm = { name: '', objective: '', duration: '' }
 
 function formatDate(dateStr) {
+  if (!dateStr) return '—'
   const d = new Date(dateStr)
+  if (isNaN(d.getTime())) return '—'
   const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
   return `${d.getDate()} de ${months[d.getMonth()]} de ${d.getFullYear()}`
 }

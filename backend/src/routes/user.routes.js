@@ -5,8 +5,8 @@ const { authenticate, authorizeRole } = require('../middlewares/auth.middleware'
 const router = Router();
 
 router.use(authenticate);
-router.get('/', userController.getAll);
-router.get('/:id', userController.getById);
+router.get('/', authorizeRole(['admin']), userController.getAll);
+router.get('/:id', authorizeRole(['admin']), userController.getById);
 router.post('/', authorizeRole(['admin']), userController.create);
 router.put('/:id', authorizeRole(['admin']), userController.update);
 router.delete('/:id', authorizeRole(['admin']), userController.remove);

@@ -30,7 +30,7 @@ export default function DashboardAdmin() {
 
   const loadUsers = () => {
     setLoading(true)
-    api.get('/users').then((res) => setUsers(res.data.data || [])).catch(() => setLoading(false))
+    api.get('/users').then((res) => { setUsers(res.data.data || []); setLoading(false) }).catch(() => setLoading(false))
   }
 
   useEffect(() => { loadUsers() }, [])
@@ -287,8 +287,8 @@ export default function DashboardAdmin() {
                   <tr><td className="small-text">Email</td><td><strong>{detailUser.email}</strong></td></tr>
                   <tr><td className="small-text">Rol</td><td><strong>{roleLabel(detailUser.role)}</strong></td></tr>
                   <tr><td className="small-text">Fecha nac.</td><td><strong>{detailUser.birth_date || '—'}</strong></td></tr>
-                  <tr><td className="small-text">Creado</td><td><strong>{new Date(detailUser.created_at).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong></td></tr>
-                  <tr><td className="small-text">Actualizado</td><td><strong>{new Date(detailUser.updated_at).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong></td></tr>
+                  <tr><td className="small-text">Creado</td><td><strong>{detailUser.created_at ? new Date(detailUser.created_at).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}</strong></td></tr>
+                  <tr><td className="small-text">Actualizado</td><td><strong>{detailUser.updated_at ? new Date(detailUser.updated_at).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}</strong></td></tr>
                   <tr><td className="small-text">Metadata</td><td><strong>{detailUser.metadata ? JSON.stringify(detailUser.metadata) : '—'}</strong></td></tr>
                   <tr><td className="small-text">Debe cambiar pass</td><td><strong>{detailUser.must_change_password ? 'Sí' : 'No'}</strong></td></tr>
                 </tbody>
