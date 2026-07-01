@@ -41,9 +41,7 @@ export default function EditProfile() {
     setError('')
     setLoading(true)
     try {
-      const res = await api.put('/auth/me', { full_name, email })
-      const updated = res.data.data
-      localStorage.setItem('user', JSON.stringify(updated))
+      const resProfile = await api.put('/auth/me', { full_name, email })
 
       if (new_password || current_password) {
         if (new_password !== confirm_password) {
@@ -59,6 +57,8 @@ export default function EditProfile() {
         await api.put('/auth/me/password', { current_password, new_password, confirm_password })
       }
 
+      const updated = resProfile.data.data
+      localStorage.setItem('user', JSON.stringify(updated))
       Swal.fire({ icon: 'success', title: 'Actualizado', text: 'Perfil actualizado correctamente', timer: 1500, showConfirmButton: false })
       setTimeout(() => navigate(`/dashboard/${user.role}`), 1500)
     } catch (err) {

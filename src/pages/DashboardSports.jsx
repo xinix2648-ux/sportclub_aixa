@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Container, Row, Col, Table, Button, Modal, Form, Spinner, Alert, Badge } from 'react-bootstrap'
-import { FaDumbbell, FaPlus, FaEdit, FaTrash, FaSync, FaTimes } from 'react-icons/fa'
+import { Container, Table, Button, Modal, Form, Spinner, Alert } from 'react-bootstrap'
+import { FaPlus, FaEdit, FaTrash, FaSync } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import DashboardLayout from '../components/DashboardLayout'
 import { listSports, createSport, updateSport, deleteSport, toggleSportStatus } from '../services/sportService'
@@ -26,7 +26,7 @@ export default function DashboardSports() {
 
   const load = useCallback(() => {
     setLoading(true)
-    listSports().then(setSports).catch(() => {}).finally(() => setLoading(false))
+    listSports().then(setSports).catch(() => { Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudieron cargar los deportes', timer: 2000, showConfirmButton: false }) }).finally(() => setLoading(false))
   }, [])
 
   useEffect(() => { load() }, [load])

@@ -4,6 +4,7 @@ import { Container, Row, Col, Table, Button, Modal, Form, Spinner, Alert, Badge 
 import { FaUsers, FaUserShield, FaChartLine, FaCogs, FaSearch, FaTimes, FaEye, FaKey, FaFileAlt, FaUserCog, FaQuoteLeft } from 'react-icons/fa'
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
+import Swal from 'sweetalert2'
 
 const initialForm = { full_name: '', email: '', password: '', role: 'user' }
 
@@ -28,6 +29,7 @@ export default function DashboardAdmin() {
   const [resetPassword, setResetPassword] = useState('')
   const [resetConfirm, setResetConfirm] = useState('')
   const [resetMsg, setResetMsg] = useState('')
+  const [resetVariant, setResetVariant] = useState('danger')
 
   const loadUsers = useCallback(() => {
     setLoading(true)
@@ -82,21 +84,21 @@ export default function DashboardAdmin() {
 
   const handleResetPass = async () => {
     if (!resetPassword || resetPassword.length < 8) {
-      setResetMsg('La contraseña debe tener al menos 8 caracteres')
+      setResetVariant('danger'); setResetMsg('La contraseña debe tener al menos 8 caracteres')
       return
     }
     if (resetPassword !== resetConfirm) {
-      setResetMsg('Las contraseñas no coinciden')
+      setResetVariant('danger'); setResetMsg('Las contraseñas no coinciden')
       return
     }
     setResetMsg(''); setSaving(true)
     try {
       await api.put(`/users/${resetPassUser.id}`, { password: resetPassword })
-      setResetMsg('Contraseña actualizada correctamente')
+      setResetVariant('success'); setResetMsg('Contraseña actualizada correctamente')
       setResetPassword(''); setResetConfirm('')
       setTimeout(() => { setShowResetPassModal(false); setResetMsg('') }, 1200)
     } catch (err) {
-      setResetMsg(err.response?.data?.message || 'Error al cambiar contraseña')
+      setResetVariant('danger'); setResetMsg(err.response?.data?.message || 'Error al cambiar contraseña')
     } finally { setSaving(false) }
   }
 
@@ -310,7 +312,7 @@ export default function DashboardAdmin() {
         <Modal.Header closeButton><Modal.Title>Resetear Contraseña</Modal.Title></Modal.Header>
         <Modal.Body>
           {resetPassUser && <p className="small-text mb-3">Nueva contraseña para <strong>{resetPassUser.full_name}</strong> ({resetPassUser.email})</p>}
-          {resetMsg && <Alert variant={resetMsg.includes('correctamente') ? 'success' : 'danger'} className="py-2 small">{resetMsg}</Alert>}
+          {resetMsg && <Alert variant={resetVariant} className="py-2 small">{resetMsg}</Alert>}
           <Form.Group className="mb-3">
             <Form.Label className="small-text">Nueva contraseña</Form.Label>
             <Form.Control type="password" value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} placeholder="Mín. 8 caracteres" minLength={8} />
@@ -358,7 +360,7 @@ export default function DashboardAdmin() {
           <Table className="table-custom mb-0" size="sm">
             <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Registro</th></tr></thead>
             <tbody>
-              {[...users].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((u) => (
+              {[...users].filter((u) => u.created_at).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((u) => (
                 <tr key={u.id}>
                   <td className="small-text">{u.id}</td>
                   <td>{u.full_name}</td>

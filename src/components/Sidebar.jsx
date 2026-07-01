@@ -44,7 +44,7 @@ export default function Sidebar() {
     }).then((result) => {
       if (result.isConfirmed) {
         logout()
-        navigate('/login')
+        navigate('/login', { replace: true })
       }
     })
   }
@@ -69,13 +69,13 @@ export default function Sidebar() {
             className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 mb-1"
             style={{
               cursor: 'pointer',
-              background: location.pathname === link.path ? `${accent}12` : 'transparent',
-              color: location.pathname === link.path ? accent : 'var(--text-muted)',
-              borderLeft: location.pathname === link.path ? `3px solid ${accent}` : '3px solid transparent',
+              background: location.pathname.startsWith(link.path) ? `${accent}12` : 'transparent',
+              color: location.pathname.startsWith(link.path) ? accent : 'var(--text-muted)',
+              borderLeft: location.pathname.startsWith(link.path) ? `3px solid ${accent}` : '3px solid transparent',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={(e) => { if (location.pathname !== link.path) { e.currentTarget.style.background = 'rgba(0,0,0,0.02)'; e.currentTarget.style.color = 'var(--text-primary)' } }}
-            onMouseLeave={(e) => { if (location.pathname !== link.path) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)' } }}
+            onMouseEnter={(e) => { if (!location.pathname.startsWith(link.path)) { e.currentTarget.style.background = 'rgba(0,0,0,0.02)'; e.currentTarget.style.color = 'var(--text-primary)' } }}
+            onMouseLeave={(e) => { if (!location.pathname.startsWith(link.path)) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)' } }}
           >
             <span style={{ fontSize: '1.1rem' }}>{link.icon}</span>
             <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{link.label}</span>

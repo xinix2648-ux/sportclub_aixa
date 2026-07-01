@@ -22,7 +22,7 @@ async function seedSportRooms() {
     });
 
     if (coaches.length === 0) {
-        console.log("No se crearon asignaciones deporte-sala: no existen usuarios coach.");
+        // No coach users available
         return;
     }
 
@@ -69,13 +69,13 @@ async function seedSportRooms() {
     }
 
     if (records.length === 0) {
-        console.log("No se crearon asignaciones deporte-sala: faltan deportes, salas o coaches.");
+        // Missing sports, rooms, or coaches
         return;
     }
 
     await SportRoom.bulkCreate(records);
 
-    console.log("SportRooms seeded successfully.");
+    // SportRooms seeded successfully
 }
 
 module.exports = seedSportRooms;

@@ -105,13 +105,13 @@ async function seedClassSchedules() {
     }
 
     if (records.length === 0) {
-        console.log("No se crearon horarios: faltan asignaciones deporte-sala.");
+        // Missing sport-room assignments
         return;
     }
 
     await ClassSchedule.bulkCreate(records);
 
-    console.log("ClassSchedules seeded successfully.");
+    // ClassSchedules seeded successfully
 }
 
 module.exports = seedClassSchedules;

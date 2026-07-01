@@ -9,11 +9,11 @@ function validateTimeRange(startTime, endTime) {
 function validateCreateClassSchedule(payload) {
     const errors = [];
 
-    if (!payload.sport_room_id || Number(payload.sport_room_id) < 1) {
+    if (!payload.sport_room_id || isNaN(Number(payload.sport_room_id)) || Number(payload.sport_room_id) < 1) {
         errors.push("Debe seleccionar una asignación deporte-sala válida.");
     }
 
-    if (!payload.day_of_week || Number(payload.day_of_week) < 1 || Number(payload.day_of_week) > 7) {
+    if (!payload.day_of_week || isNaN(Number(payload.day_of_week)) || Number(payload.day_of_week) < 1 || Number(payload.day_of_week) > 7) {
         errors.push("El día de la semana debe estar entre 1 y 7.");
     }
 
@@ -35,13 +35,13 @@ function validateCreateClassSchedule(payload) {
 function validateUpdateClassSchedule(payload) {
     const errors = [];
 
-    if (payload.sport_room_id !== undefined && Number(payload.sport_room_id) < 1) {
+    if (payload.sport_room_id !== undefined && (isNaN(Number(payload.sport_room_id)) || Number(payload.sport_room_id) < 1)) {
         errors.push("Debe seleccionar una asignación deporte-sala válida.");
     }
 
     if (
         payload.day_of_week !== undefined &&
-        (Number(payload.day_of_week) < 1 || Number(payload.day_of_week) > 7)
+        (isNaN(Number(payload.day_of_week)) || Number(payload.day_of_week) < 1 || Number(payload.day_of_week) > 7)
     ) {
         errors.push("El día de la semana debe estar entre 1 y 7.");
     }

@@ -34,7 +34,7 @@ export default function App() {
       <Route path="/dashboard/admin" element={<RoleRoute role="admin"><DashboardAdmin /></RoleRoute>} />
       <Route path="/dashboard/deportes" element={<RoleRoute role="admin"><DashboardSports /></RoleRoute>} />
       <Route path="/dashboard/perfil" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-      <Route path="*" element={<RedirectHome />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </ErrorBoundary>
   )

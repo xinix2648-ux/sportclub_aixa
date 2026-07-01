@@ -20,7 +20,7 @@ async function seedReservations() {
     });
 
     if (!user || !schedule) {
-        console.log("No se crearon reservas: faltan usuarios o horarios.");
+        // Missing users or schedules
         return;
     }
 
@@ -31,7 +31,7 @@ async function seedReservations() {
         observation: "Reserva generada como dato inicial."
     });
 
-    console.log("Reservations seeded successfully.");
+    // Reservations seeded successfully
 }
 
 module.exports = seedReservations;

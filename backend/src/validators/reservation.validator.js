@@ -1,7 +1,7 @@
 function validateCreateReservation(payload) {
     const errors = [];
 
-    if (!payload.class_schedule_id || Number(payload.class_schedule_id) < 1) {
+    if (!payload.class_schedule_id || isNaN(Number(payload.class_schedule_id)) || Number(payload.class_schedule_id) < 1) {
         errors.push("Debe seleccionar un horario de clase válido.");
     }
 

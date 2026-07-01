@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import { FaDumbbell, FaHeart, FaUsers, FaCalendarCheck, FaShieldAlt, FaBrain, FaQuoteLeft, FaStar, FaCheckCircle, FaRocket, FaCrown, FaFire, FaArrowRight } from 'react-icons/fa'
@@ -40,8 +39,9 @@ const values = [
   { icon: <FaShieldAlt size={28} />, title: 'Respeto', text: 'Todos son bienvenidos. Todos importan. Todos crecemos.' },
 ]
 
+const phraseIndex = Math.floor(Math.random() * dailyPhrases.length)
+
 export default function Landing() {
-  const [phraseIndex] = useState(Math.floor(Math.random() * dailyPhrases.length))
 
   return (
     <>

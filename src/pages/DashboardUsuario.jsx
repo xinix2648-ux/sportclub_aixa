@@ -53,7 +53,8 @@ export default function DashboardUsuario() {
       time: cs.start_time?.slice(0, 5) || '—',
       type: sr.sport?.name || '—',
       coach: sr.coach?.full_name || sr.coach?.email || '—',
-      status: r.status === 'active' ? 'Activa' : r.status === 'cancelled' ? 'Cancelada' : r.status,
+      status: r.status,
+      statusLabel: r.status === 'active' ? 'Activa' : r.status === 'cancelled' ? 'Cancelada' : r.status,
       location: sr.room?.name || '—',
     }
   })
@@ -77,7 +78,7 @@ export default function DashboardUsuario() {
   const stats = [
     { icon: <FaCalendarCheck size={24} />, label: 'Reservas activas', value: activeReservations.length.toString(), key: 'reservas', color: 'var(--user-color)' },
     { icon: <FaDumbbell size={24} />, label: 'Clases disponibles', value: (dashData?.available_classes ?? classes.length).toString(), key: 'clases', color: 'var(--user-color)' },
-    { icon: <FaClock size={24} />, label: 'Próximas clases', value: (dashData?.available_classes ?? classes.length).toString(), key: 'horas', color: 'var(--user-color)' },
+    { icon: <FaClock size={24} />, label: 'Próximas clases', value: activeReservations.length.toString(), key: 'horas', color: 'var(--user-color)' },
     { icon: <FaFire size={24} />, label: 'Deportes', value: ((dashData?.available_sports ?? 0) || 0).toString(), key: 'racha', color: 'var(--user-color)' },
   ]
 
@@ -133,7 +134,7 @@ export default function DashboardUsuario() {
                       {mappedReservations.map((r) => (
                         <tr key={r.id}>
                           <td>{r.date}</td><td>{r.time}</td><td>{r.type}</td>
-                          <td><span className={`badge-role ${r.status === 'Activa' ? 'badge-coach' : 'badge-user'}`}>{r.status}</span></td>
+                          <td><span className={`badge-role ${r.status === 'active' ? 'badge-coach' : 'badge-user'}`}>{r.statusLabel}</span></td>
                           <td><Button variant="outline-dark" size="sm" onClick={() => setShowDetail(r)}><FaEye /></Button></td>
                         </tr>
                       ))}
@@ -201,7 +202,7 @@ export default function DashboardUsuario() {
                       {mappedReservations.map((r) => (
                         <tr key={r.id}>
                           <td>{r.date}</td><td>{r.time}</td><td>{r.type}</td>
-                          <td><span className={`badge-role ${r.status === 'Activa' ? 'badge-coach' : 'badge-user'}`}>{r.status}</span></td>
+                          <td><span className={`badge-role ${r.status === 'active' ? 'badge-coach' : 'badge-user'}`}>{r.statusLabel}</span></td>
                         </tr>
                       ))}
                     </tbody>
@@ -225,7 +226,7 @@ export default function DashboardUsuario() {
                     <tr><td className="small-text">Horario</td><td><strong>{showDetail.date} {showDetail.time}</strong></td></tr>
                     <tr><td className="small-text">Entrenador</td><td><strong><FaUserTie className="me-1" />{showDetail.coach}</strong></td></tr>
                     <tr><td className="small-text">Ubicación</td><td><strong><FaMapMarkerAlt className="me-1" />{showDetail.location}</strong></td></tr>
-                    <tr><td className="small-text">Estado</td><td><span className={`badge-role ${showDetail.status === 'Activa' ? 'badge-coach' : 'badge-user'}`}>{showDetail.status}</span></td></tr>
+                    <tr><td className="small-text">Estado</td><td><span className={`badge-role ${showDetail.status === 'active' ? 'badge-coach' : 'badge-user'}`}>{showDetail.statusLabel || showDetail.status}</span></td></tr>
                   </tbody>
                 </table>
               ) : (

@@ -6,7 +6,6 @@ async function seedSports() {
     const count = await Sport.count();
 
     if (count > 0) {
-        console.log('Sports already seeded.');
         return;
     }
 
@@ -49,7 +48,7 @@ async function seedSports() {
         }
     ]);
 
-    console.log('Sports seeded successfully.');
+    // Sports seeded successfully.
 }
 
 module.exports = { seedSports };
