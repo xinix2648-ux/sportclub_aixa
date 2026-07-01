@@ -17,7 +17,7 @@ export function updateSport(id, data) {
 }
 
 export function deleteSport(id) {
-  return api.delete(`/sports/${id}`).then((res) => res.data)
+  return api.delete(`/sports/${id}`).then((res) => res.data.data)
 }
 
 export function toggleSportStatus(id, status) {

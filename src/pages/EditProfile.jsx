@@ -4,6 +4,7 @@ import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstr
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
 import { getUser } from '../services/authService'
+import Swal from 'sweetalert2'
 
 const roleColors = { user: 'var(--user-color)', coach: 'var(--coach-color)', admin: 'var(--admin-color)' }
 
@@ -11,15 +12,28 @@ export default function EditProfile() {
   const navigate = useNavigate()
   const user = getUser()
 
-  const [full_name, setFullName] = useState(user?.full_name || '')
-  const [email, setEmail] = useState(user?.email || '')
+  if (!user) {
+    return (
+      <DashboardLayout>
+        <Container fluid className="px-0" style={{ maxWidth: 700 }}>
+          <div className="text-center py-5">
+            <p className="small-text">No se pudo cargar la información del usuario.</p>
+            <Button variant="outline-dark" size="sm" onClick={() => navigate('/login')}>Ir a iniciar sesión</Button>
+          </div>
+        </Container>
+      </DashboardLayout>
+    )
+  }
+
+  const [full_name, setFullName] = useState(user.full_name || '')
+  const [email, setEmail] = useState(user.email || '')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const initials = user?.full_name ? user.full_name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2) : '??'
-  const accent = roleColors[user?.role] || 'var(--pink)'
+  const initials = user.full_name ? user.full_name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2) : '??'
+  const accent = roleColors[user.role] || 'var(--pink)'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -29,9 +43,11 @@ export default function EditProfile() {
     try {
       const payload = { full_name, email }
       if (password) payload.password = password
-      await api.put(`/users/${user.id}`, payload)
-      setSuccess('Perfil actualizado correctamente')
-      setTimeout(() => navigate(0), 1500)
+      const res = await api.put(`/users/${user.id}`, payload)
+      const updated = res.data.data
+      localStorage.setItem('user', JSON.stringify(updated))
+      Swal.fire({ icon: 'success', title: 'Actualizado', text: 'Perfil actualizado correctamente', timer: 1500, showConfirmButton: false })
+      setTimeout(() => navigate('/dashboard'), 1500)
     } catch (err) {
       setError(err.response?.data?.message || 'Error al actualizar perfil')
     } finally {

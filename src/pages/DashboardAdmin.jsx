@@ -30,7 +30,7 @@ export default function DashboardAdmin() {
 
   const loadUsers = () => {
     setLoading(true)
-    api.get('/users').then((res) => setUsers(res.data.data || [])).catch(() => {}).finally(() => setLoading(false))
+    api.get('/users').then((res) => setUsers(res.data.data || [])).catch(() => setLoading(false))
   }
 
   useEffect(() => { loadUsers() }, [])

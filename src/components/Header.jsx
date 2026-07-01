@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
+import Swal from 'sweetalert2'
 import { getUser, logout } from '../services/authService'
 
 const roleColors = { user: 'var(--user-color)', coach: 'var(--coach-color)', admin: 'var(--admin-color)' }
@@ -10,8 +11,20 @@ export default function Header() {
   const user = getUser()
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#e91e63',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout()
+        navigate('/login')
+      }
+    })
   }
 
   const initials = user?.full_name ? user.full_name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2) : '??'

@@ -71,7 +71,7 @@ export default function DashboardUsuario() {
   const stats = [
     { icon: <FaCalendarCheck size={24} />, label: 'Reservas activas', value: activeReservations.length.toString(), key: 'reservas', color: 'var(--user-color)' },
     { icon: <FaDumbbell size={24} />, label: 'Clases disponibles', value: (dashData?.available_classes ?? classes.length).toString(), key: 'clases', color: 'var(--user-color)' },
-    { icon: <FaClock size={24} />, label: 'Total clases', value: (dashData?.available_classes ?? classes.length).toString() + 'h', key: 'horas', color: 'var(--user-color)' },
+    { icon: <FaClock size={24} />, label: 'Próximas clases', value: (dashData?.available_classes ?? classes.length).toString(), key: 'horas', color: 'var(--user-color)' },
     { icon: <FaFire size={24} />, label: 'Deportes', value: (dashData?.available_sports ?? '—').toString(), key: 'racha', color: 'var(--user-color)' },
   ]
 

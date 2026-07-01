@@ -5,7 +5,9 @@ const USER_KEY = 'user'
 
 export function login(email, password) {
   return api.post('/auth/login', { email, password }).then((res) => {
-    const { token, user } = res.data.data
+    const data = res.data.data
+    if (!data) throw new Error('Respuesta inválida del servidor')
+    const { token, user } = data
     localStorage.setItem(TOKEN_KEY, token)
     localStorage.setItem(USER_KEY, JSON.stringify(user))
     return user
@@ -14,7 +16,9 @@ export function login(email, password) {
 
 export function register(data) {
   return api.post('/auth/register', data).then((res) => {
-    const { token, user } = res.data.data
+    const data = res.data.data
+    if (!data) throw new Error('Respuesta inválida del servidor')
+    const { token, user } = data
     localStorage.setItem(TOKEN_KEY, token)
     localStorage.setItem(USER_KEY, JSON.stringify(user))
     return user

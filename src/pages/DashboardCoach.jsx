@@ -54,7 +54,7 @@ export default function DashboardCoach() {
     { icon: <FaUserGraduate size={24} />, label: 'Alumnos', value: students.length, color: 'var(--coach-color)' },
     { icon: <FaChalkboardTeacher size={24} />, label: 'Clases activas', value: dashData?.total_classes ?? myClasses.length, color: 'var(--coach-color)' },
     { icon: <FaCalendarAlt size={24} />, label: 'Horas/semana', value: `${Math.round(totalHours)}h`, color: 'var(--coach-color)' },
-    { icon: <FaClipboardList size={24} />, label: 'Total alumnos', value: students.length, color: 'var(--coach-color)' },
+    { icon: <FaClipboardList size={24} />, label: 'Horarios activos', value: schedules.length, color: 'var(--coach-color)' },
   ]
 
   const schedulesByDay = [...schedules].sort((a, b) => a.day_of_week - b.day_of_week)

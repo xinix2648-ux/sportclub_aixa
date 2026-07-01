@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { getUser, logout } from '../services/authService'
 import { FaTachometerAlt, FaUsers, FaUserGraduate, FaDumbbell, FaUserCog, FaSignOutAlt } from 'react-icons/fa'
 
@@ -32,8 +33,20 @@ export default function Sidebar() {
   const accent = roleColors[user.role]
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#e91e63',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout()
+        navigate('/login')
+      }
+    })
   }
 
   return (

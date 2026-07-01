@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button, Container, Row, Col } from 'react-bootstrap'
+import { Form, Button, Container, Row, Col, Spinner } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 
 export default function Recover() {
   const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
+    await new Promise((r) => setTimeout(r, 1200))
+    setLoading(false)
     Swal.fire({
       icon: 'success',
       title: 'Correo enviado',
@@ -32,7 +36,9 @@ export default function Recover() {
                   <Form.Label className="small-text">Email registrado</Form.Label>
                   <Form.Control type="email" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </Form.Group>
-                <Button type="submit" className="btn-pink w-100">Enviar enlace</Button>
+                <Button type="submit" className="btn-pink w-100" disabled={loading}>
+                  {loading ? <Spinner size="sm" /> : 'Enviar enlace'}
+                </Button>
               </Form>
               <p className="mt-3 small-text mb-0">
                 <Link to="/login" className="text-pink text-decoration-none">Volver al inicio de sesión</Link>

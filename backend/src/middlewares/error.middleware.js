@@ -10,7 +10,8 @@ function errorHandler(err, req, res, next) {
   return res.status(statusCode).json({
     ok: false,
     message: err.message || 'Error interno del servidor.',
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    errors: err.details || undefined,
+    stack: (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined) ? err.stack : undefined
   });
 }
 

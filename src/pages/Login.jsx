@@ -17,8 +17,8 @@ export default function Login() {
     setLoading(true)
     try {
       const user = await login(email, password)
-      if (user.must_change_password) {
-        navigate('/edit-profile')
+      if (user?.must_change_password) {
+        navigate('/dashboard/perfil')
         return
       }
       const dashboards = { user: '/dashboard/user', coach: '/dashboard/coach', admin: '/dashboard/admin' }

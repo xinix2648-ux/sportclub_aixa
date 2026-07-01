@@ -7,21 +7,18 @@ async function seedSportRooms() {
         return;
     }
 
-    const football = await Sport.findOne({ where: { name: "Fútbol" } });
+    const crossfit = await Sport.findOne({ where: { name: "CrossFit" } });
     const yoga = await Sport.findOne({ where: { name: "Yoga" } });
     const spinning = await Sport.findOne({ where: { name: "Spinning" } });
-    const swimming = await Sport.findOne({ where: { name: "Natación" } });
+    const funcional = await Sport.findOne({ where: { name: "Entrenamiento Funcional" } });
 
     const footballRoom = await Room.findOne({ where: { name: "Cancha Fútbol 1" } });
     const yogaRoom = await Room.findOne({ where: { name: "Sala Yoga" } });
     const spinningRoom = await Room.findOne({ where: { name: "Sala Spinning" } });
-    const swimmingRoom = await Room.findOne({ where: { name: "Piscina Temperada" } });
+    const funcionalRoom = await Room.findOne({ where: { name: "Cancha Fútbol 2" } });
 
     const coaches = await User.findAll({
-        where: {
-            role: "coach"
-        },
-        limit: 4
+        where: { role: "coach" }
     });
 
     if (coaches.length === 0) {
@@ -31,17 +28,17 @@ async function seedSportRooms() {
 
     const records = [];
 
-    if (football && footballRoom && coaches[0]) {
+    if (crossfit && footballRoom && coaches[0]) {
         records.push({
-            sport_id: football.id,
+            sport_id: crossfit.id,
             room_id: footballRoom.id,
             coach_id: coaches[0].id,
-            observation: "Clase principal de fútbol.",
+            observation: "Clase de CrossFit en cancha.",
             status: true
         });
     }
 
-    if (yoga && yogaRoom && coaches[1]) {
+    if (yoga && yogaRoom && coaches.length > 1) {
         records.push({
             sport_id: yoga.id,
             room_id: yogaRoom.id,
@@ -51,7 +48,7 @@ async function seedSportRooms() {
         });
     }
 
-    if (spinning && spinningRoom && coaches[2]) {
+    if (spinning && spinningRoom && coaches.length > 2) {
         records.push({
             sport_id: spinning.id,
             room_id: spinningRoom.id,
@@ -61,12 +58,12 @@ async function seedSportRooms() {
         });
     }
 
-    if (swimming && swimmingRoom && coaches[3]) {
+    if (funcional && funcionalRoom && coaches.length > 3) {
         records.push({
-            sport_id: swimming.id,
-            room_id: swimmingRoom.id,
+            sport_id: funcional.id,
+            room_id: funcionalRoom.id,
             coach_id: coaches[3].id,
-            observation: "Clase de natación supervisada.",
+            observation: "Clase de entrenamiento funcional.",
             status: true
         });
     }
