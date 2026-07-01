@@ -21,4 +21,16 @@ async function authenticate(req, res, next) {
   }
 }
 
-module.exports = { authenticate };
+function authorizeRole(...allowedRoles) {
+  return (req, res, next) => {
+    if (!req.user) {
+      return fail(res, 'No autorizado. Debe iniciar sesión.', 401);
+    }
+    if (!allowedRoles.flat().includes(req.user.role)) {
+      return fail(res, 'No tienes permisos para realizar esta acción.', 403);
+    }
+    next();
+  };
+}
+
+module.exports = { authenticate, authorizeRole };

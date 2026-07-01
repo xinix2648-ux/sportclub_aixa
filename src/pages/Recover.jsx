@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button, Alert, Container, Row, Col } from 'react-bootstrap'
+import { Form, Button, Container, Row, Col } from 'react-bootstrap'
+import Swal from 'sweetalert2'
 
 export default function Recover() {
   const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    setSent(true)
+    Swal.fire({
+      icon: 'success',
+      title: 'Correo enviado',
+      text: `Se ha enviado un enlace de recuperación a ${email}`,
+      confirmButtonColor: '#e91e63',
+    })
   }
 
   return (
@@ -22,19 +27,13 @@ export default function Recover() {
                 <h3 className="text-pink fw-bold mb-1">Porcinos Sport Club</h3>
               </Link>
               <p className="small-text mb-4">Recupera tu contraseña</p>
-              {sent ? (
-                <Alert variant="success" className="py-3">
-                  Se ha enviado un enlace de recuperación a <strong>{email}</strong>.
-                </Alert>
-              ) : (
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-4 text-start">
-                    <Form.Label className="small-text">Email registrado</Form.Label>
-                    <Form.Control type="email" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                  </Form.Group>
-                  <Button type="submit" className="btn-pink w-100">Enviar enlace</Button>
-                </Form>
-              )}
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-4 text-start">
+                  <Form.Label className="small-text">Email registrado</Form.Label>
+                  <Form.Control type="email" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                </Form.Group>
+                <Button type="submit" className="btn-pink w-100">Enviar enlace</Button>
+              </Form>
               <p className="mt-3 small-text mb-0">
                 <Link to="/login" className="text-pink text-decoration-none">Volver al inicio de sesión</Link>
               </p>

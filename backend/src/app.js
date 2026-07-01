@@ -12,7 +12,6 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Serve React SPA in production
 const distPath = path.join(__dirname, '../..', 'dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
@@ -28,7 +27,8 @@ if (fs.existsSync(distPath)) {
         login: 'POST /api/auth/login',
         register: 'POST /api/auth/register',
         me: 'GET /api/auth/me',
-        users: 'GET /api/users'
+        users: 'GET /api/users',
+        sports: 'GET /api/sports'
       }
     });
   });
@@ -36,7 +36,6 @@ if (fs.existsSync(distPath)) {
 
 app.use('/api', routes);
 
-// SPA catch-all for client-side routes (Express 5 syntax)
 if (fs.existsSync(distPath)) {
   app.get('/{*splat}', (_req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
