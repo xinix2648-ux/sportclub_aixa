@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Row, Col, Table, Button, Modal, Form, Spinner, Alert, Badge } from 'react-bootstrap'
-import { FaUsers, FaUserShield, FaChartLine, FaCogs, FaSearch, FaTimes, FaEye, FaKey, FaFileAlt, FaUserCog, FaQuoteLeft } from 'react-icons/fa'
+import { FaUsers, FaUserShield, FaChartLine, FaCogs, FaSearch, FaTimes, FaEye, FaKey, FaFileAlt, FaUserCog, FaQuoteLeft, FaTrash } from 'react-icons/fa'
 import DashboardLayout from '../components/DashboardLayout'
 import api from '../services/api'
 import Swal from 'sweetalert2'
@@ -110,6 +110,29 @@ export default function DashboardAdmin() {
     setResetPassUser(user); setResetPassword(''); setResetConfirm(''); setResetMsg(''); setShowResetPassModal(true)
   }
 
+  const handleDelete = (user) => {
+    Swal.fire({
+      title: `¿Eliminar a ${user.full_name}?`,
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await api.delete(`/users/${user.id}`)
+          Swal.fire('Eliminado', 'Usuario eliminado correctamente.', 'success')
+          loadUsers()
+        } catch (err) {
+          Swal.fire('Error', err.response?.data?.message || 'No se pudo eliminar.', 'error')
+        }
+      }
+    })
+  }
+
   const roleBadgeClass = (role) => {
     if (role === 'admin') return 'badge-admin'
     if (role === 'coach') return 'badge-coach'
@@ -206,6 +229,7 @@ export default function DashboardAdmin() {
                               <Button variant="outline-dark" size="sm" onClick={() => openDetail(u)} title="Ver detalles"><FaEye /></Button>
                               <Button variant="outline-dark" size="sm" onClick={() => openEdit(u)} title="Editar"><FaUserCog /></Button>
                               <Button variant="outline-dark" size="sm" onClick={() => openResetPass(u)} title="Resetear contraseña"><FaKey /></Button>
+                              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(u)} title="Eliminar"><FaTrash /></Button>
                             </div>
                           </td>
                         </tr>

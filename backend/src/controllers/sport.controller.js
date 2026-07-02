@@ -1,6 +1,6 @@
 // src/controllers/sport.controller.js
 const sportService = require('../services/sport.service');
-const { success } = require('../utils/api-response');
+const { success, fail } = require('../utils/api-response');
 const { validateSportPayload } = require('../validators/sport.validator');
 
 async function getAll(req, res, next) {
@@ -34,11 +34,7 @@ async function create(req, res, next) {
         const { isValid, errors, data } = validateSportPayload(req.body);
 
         if (!isValid) {
-            return res.status(400).json({
-                ok: false,
-                message: 'Payload inválido.',
-                errors
-            });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         const sport = await sportService.createSport(data);
@@ -56,11 +52,7 @@ async function update(req, res, next) {
         });
 
         if (!isValid) {
-            return res.status(400).json({
-                ok: false,
-                message: 'Payload inválido.',
-                errors
-            });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         const sport = await sportService.updateSport(req.params.id, data);
@@ -73,14 +65,7 @@ async function update(req, res, next) {
 
 async function remove(req, res, next) {
     try {
-        const deleted = await sportService.deleteSport(req.params.id);
-
-        if (!deleted) {
-            return res.status(404).json({
-                ok: false,
-                message: 'Deporte no encontrado.'
-            });
-        }
+        await sportService.deleteSport(req.params.id);
 
         return success(res, 'Deporte eliminado correctamente.');
     } catch (error) {
@@ -93,23 +78,10 @@ async function changeStatus(req, res, next) {
         const { status } = req.body;
 
         if (typeof status !== 'boolean') {
-            return res.status(400).json({
-                ok: false,
-                message: 'Payload inválido.',
-                errors: {
-                    status: 'El estado debe ser verdadero o falso.'
-                }
-            });
+            return fail(res, 'Payload inválido.', 400, { status: 'El estado debe ser verdadero o falso.' });
         }
 
         const sport = await sportService.changeSportStatus(req.params.id, status);
-
-        if (!sport) {
-            return res.status(404).json({
-                ok: false,
-                message: 'Deporte no encontrado.'
-            });
-        }
 
         return success(res, 'Estado del deporte actualizado correctamente.', sport);
     } catch (error) {

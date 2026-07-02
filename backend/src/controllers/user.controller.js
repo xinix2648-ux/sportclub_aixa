@@ -1,5 +1,5 @@
 const userService = require('../services/user.service');
-const { success } = require('../utils/api-response');
+const { success, fail } = require('../utils/api-response');
 const { validateUserPayload } = require('../validators/user.validator');
 
 async function getAll(req, res, next) {
@@ -26,7 +26,7 @@ async function create(req, res, next) {
     try {
         const { isValid, errors, data } = validateUserPayload(req.body);
         if (!isValid) {
-            return res.status(400).json({ ok: false, message: 'Payload inválido.', errors });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         const user = await userService.createUser(data);
@@ -40,7 +40,7 @@ async function update(req, res, next) {
     try {
         const { isValid, errors, data } = validateUserPayload(req.body, { partial: true });
         if (!isValid) {
-            return res.status(400).json({ ok: false, message: 'Payload inválido.', errors });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         const user = await userService.updateUser(req.params.id, data);
@@ -53,20 +53,10 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
     try {
         if (req.user.id == req.params.id) {
-            return res.status(400).json({
-                ok: false,
-                message: 'No puedes eliminar tu propio usuario.'
-            });
+            return fail(res, 'No puedes eliminar tu propio usuario.');
         }
 
-        const deleted = await userService.deleteUser(req.params.id);
-
-        if (!deleted) {
-            return res.status(404).json({
-                ok: false,
-                message: 'Usuario no encontrado.'
-            });
-        }
+        await userService.deleteUser(req.params.id);
 
         return success(res, 'Usuario eliminado correctamente.');
     } catch (error) {

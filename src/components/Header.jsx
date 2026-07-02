@@ -22,7 +22,7 @@ export default function Header() {
     }).then((result) => {
       if (result.isConfirmed) {
         logout()
-        navigate('/login')
+        navigate('/login', { replace: true })
       }
     })
   }

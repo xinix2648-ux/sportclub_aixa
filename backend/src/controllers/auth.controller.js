@@ -1,6 +1,6 @@
 const authService = require('../services/auth.service');
 const userService = require('../services/user.service');
-const { success } = require('../utils/api-response');
+const { success, fail } = require('../utils/api-response');
 const { validateLoginPayload } = require('../validators/auth.validator');
 const { validateUserPayload } = require('../validators/user.validator');
 const { signAccessToken } = require('../utils/jwt');
@@ -10,11 +10,7 @@ async function login(req, res, next) {
         const { isValid, errors } = validateLoginPayload(req.body);
 
         if (!isValid) {
-            return res.status(400).json({
-                ok: false,
-                message: 'Payload inválido.',
-                errors
-            });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         const result = await authService.login(req.body);
@@ -31,11 +27,7 @@ async function registerUser(req, res, next) {
         });
 
         if (!isValid) {
-            return res.status(400).json({
-                ok: false,
-                message: 'Payload inválido.',
-                errors
-            });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         const user = await userService.createUser(data);
@@ -64,11 +56,7 @@ async function updateMe(req, res, next) {
         });
 
         if (!isValid) {
-            return res.status(400).json({
-                ok: false,
-                message: 'Payload inválido.',
-                errors
-            });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         const updatedUser = await userService.updateUser(req.user.id, data);
@@ -102,11 +90,7 @@ async function changePassword(req, res, next) {
         }
 
         if (Object.keys(errors).length > 0) {
-            return res.status(400).json({
-                ok: false,
-                message: 'Payload inválido.',
-                errors
-            });
+            return fail(res, 'Payload inválido.', 400, errors);
         }
 
         await authService.changePassword(req.user.id, current_password, new_password);
@@ -121,10 +105,7 @@ async function recoverPassword(req, res, next) {
     try {
         const { email } = req.body;
         if (!email || !String(email).trim()) {
-            return res.status(400).json({
-                ok: false,
-                message: 'El correo es obligatorio.'
-            });
+            return fail(res, 'El correo es obligatorio.');
         }
         return success(res, 'Si el correo está registrado, recibirás un enlace de recuperación.');
     } catch (error) {

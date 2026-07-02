@@ -1,6 +1,6 @@
 import api from './api'
 
-const TOKEN_KEY = 'token'
+export const TOKEN_KEY = 'token'
 const USER_KEY = 'user'
 
 export function login(email, password) {

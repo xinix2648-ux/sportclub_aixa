@@ -1,8 +1,7 @@
+const { fail } = require('../utils/api-response');
+
 function notFound(req, res) {
-  return res.status(404).json({
-    ok: false,
-    message: `Ruta no encontrada: ${req.method} ${req.originalUrl}`
-  });
+  return fail(res, `Ruta no encontrada: ${req.method} ${req.originalUrl}`, 404);
 }
 
 function errorHandler(err, req, res, next) {

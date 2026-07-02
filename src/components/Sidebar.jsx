@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { getUser, logout } from '../services/authService'
-import { FaTachometerAlt, FaUsers, FaUserGraduate, FaDumbbell, FaUserCog, FaSignOutAlt } from 'react-icons/fa'
+import { FaTachometerAlt, FaUsers, FaUserGraduate, FaDumbbell, FaUserCog, FaSignOutAlt, FaCalendarAlt, FaChalkboardTeacher } from 'react-icons/fa'
 
 const roleLinks = {
   admin: [
@@ -11,10 +11,12 @@ const roleLinks = {
   ],
   coach: [
     { path: '/dashboard/coach', label: 'Panel', icon: <FaUserGraduate /> },
+    { path: '/dashboard/coach/clases', label: 'Mis Clases', icon: <FaChalkboardTeacher /> },
     { path: '/dashboard/perfil', label: 'Perfil', icon: <FaUserCog /> },
   ],
   user: [
     { path: '/dashboard/user', label: 'Panel', icon: <FaUsers /> },
+    { path: '/dashboard/user/reservas', label: 'Reservas', icon: <FaCalendarAlt /> },
     { path: '/dashboard/perfil', label: 'Perfil', icon: <FaUserCog /> },
   ],
 }
